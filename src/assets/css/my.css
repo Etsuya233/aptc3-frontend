@@ -1,0 +1,72 @@
+p {
+    color: royalblue;
+}
+
+.box1 {
+    background-color: antiquewhite;
+    padding: 10px;
+    border-radius: 10px;
+    color: royalblue;
+}
+
+.container h1{
+    font-weight: bold;
+    text-align: center;
+    text-decoration: wavy;
+    letter-spacing: 0.1em;
+    /* em是倍速 */
+}
+
+.container {
+    border: #555555 dotted;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    color: #555555;
+    width: 80%;
+    margin: auto;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.button_area {
+    padding: 10px;
+    align-items: center;
+}
+
+.button_area button{
+    padding: 10px;
+    background-color: aliceblue;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+/* button:hover 指的是把鼠标放到按钮上的效果，active是点击 */
+.button_area button:hover {
+    background-color: skyblue;
+}
+
+.block{
+    border: #555555 dotted;
+    border-radius: 10px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    color: #555555;
+
+    /* 浮动：
+        float表示浮动的方式，
+        width表示宽度为33%，但是此时有边框，会导致一行只能装三个
+        这个时候就要使用box-sizing指定盖box为border-box即可！
+        浮动用完需要清除（下面的clear——float）
+    */
+    float: left;
+    width: 33.3%;
+    box-sizing: border-box;
+
+
+    margin: auto;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.clear_float{
+    clear: both;
+}
