@@ -12,15 +12,15 @@ export const login = (userLoginDTO) => {
         data: userLoginDTO,
     }).then((response) => {
         //将用户信息保存至pinia
-        userStore.isLoggedIn = true;
+        userStore.isLoggedInSto = true;
         userStore.uid = response.data.data.uid;
-        userStore.arcId = response.data.data.arcId;
+        userStore.arcId = response.data.data.arcId; 
         userStore.username = response.data.data.username;
         userStore.status = response.data.data.status;
-        userStore.token = response.data.data.token;
+        userStore.tokenSto = response.data.data.token;
         userStore.ptt = response.data.data.ptt;
         userStore.pttB30 = response.data.data.pttB30;
-        userStore.pttR10 = response.data.data.pttB30;
+        userStore.pttR10 = response.data.data.pttR10;
 
         //持久化保存
         let token = response.data.data.token;
@@ -37,14 +37,14 @@ export const getCurrentUserDetail = () => {
         method: 'GET',
     }).then((response) => {
         //将用户信息保存至pinia
-        userStore.isLoggedIn = true;
+        userStore.isLoggedInSto = localStorage.getItem('isLoggedIn');
         userStore.uid = response.data.data.uid;
         userStore.arcId = response.data.data.arcId;
         userStore.username = response.data.data.username;
         userStore.status = response.data.data.status;
-        userStore.token = localStorage.getItem('token');
+        userStore.tokenSto = localStorage.getItem('token');
         userStore.ptt = response.data.data.ptt;
         userStore.pttB30 = response.data.data.pttB30;
-        userStore.pttR10 = response.data.data.pttB30;
+        userStore.pttR10 = response.data.data.pttR10;
     })
 }

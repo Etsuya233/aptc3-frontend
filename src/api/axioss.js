@@ -12,7 +12,7 @@ const axioss = axios.create({
 //请求拦截器
 axioss.interceptors.request.use((config) => {
     //为每一次请求都带上token
-    const token = localStorage.getItem('token');
+    const token = userStore.token;
     if(token){
         config.headers.Authorization = `Bearer ${token}`;
     }
@@ -20,7 +20,7 @@ axioss.interceptors.request.use((config) => {
 })
 
 //响应拦截器
-axios.interceptors.response.use(
+axioss.interceptors.response.use(
     (response) => {
       return response;
     },
@@ -28,7 +28,9 @@ axios.interceptors.response.use(
         //处理401
         if (error.response && error.response.status === 401) {
             localStorage.setItem('isLoggedIn', false);
-            localStorage.setItem('token', '');
+            localStorage.removeItem('token');
+            userStore.isLoggedInSto = false;
+            userStore.tokenSto = undefined;
             router.push({ name: 'login' });
         } else {
             console.error('Error:', error);

@@ -6,19 +6,22 @@
         </el-aside>
 
         <el-main class="main">
+            {{ store.token }}
+            {{ store.isLoggedIn }}
             <h1 style="text-align: center;">User Page</h1>
             <h3 style="text-align: center;">{{ store.username }}</h3>
-
             <RouterView />
-
         </el-main>
 
     </el-container>    
 </template>
 
 <script setup>
+import {ref} from 'vue';
 import useUserStore from '@/stores/store.js'
 const store = useUserStore();
+
+
 
 </script>
 

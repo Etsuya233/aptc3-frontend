@@ -1,5 +1,8 @@
 <template>
     Song Score List
+
+    
+
 </template>
 
 <script setup>

@@ -32,16 +32,18 @@ const router = createRouter({
     ]
 })
 
+
 const userStore = useUserStore(pinia);
 
 router.beforeEach((to, from) => {
     //验证是否需要登录
-    if(to.meta.requiresAuth && !localStorage.getItem('isLoggedIn')){
-        return { name: 'login' }
+    if(to.meta.requiresAuth && !userStore.isLoggedIn){
+        return { name: 'login' };
     }
 
     //查看用户信息是否存在
-    if(localStorage.getItem('isLoggedIn') && (userStore.username == null || userStore.username == '')){
+    if(userStore.isLoggedIn && userStore.username == undefined){
+        console.log(userStore.isLoggedIn, userStore.username);
         getCurrentUserDetail();
     }
 })
