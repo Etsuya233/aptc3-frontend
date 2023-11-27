@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import pinia from '@/stores/index.js';
 import { useUserStore } from "@/stores/store.js";
+import { getCurrentUserDetail } from "@/api/user";
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -16,10 +17,17 @@ const router = createRouter({
         {
             path: '/user',
             name: 'user',
-            component: () => import('@/views/UserIndex.vue'),
+            component: () => import('@/views/UserMain.vue'),
             meta: {
                 requiresAuth: true,
-            }
+            },
+            children: [
+                {
+                    path: 'score',
+                    name: 'score',
+                    component: () => import('@/components/SongScore.vue'),
+                }
+            ]
         }
     ]
 })
@@ -27,9 +35,14 @@ const router = createRouter({
 const userStore = useUserStore(pinia);
 
 router.beforeEach((to, from) => {
-    if(to.meta.requiresAuth && !userStore.isLoggedIn){
-        console.log("用户未登录，尝试请求：" + to.fullPath);
+    //验证是否需要登录
+    if(to.meta.requiresAuth && !localStorage.getItem('isLoggedIn')){
         return { name: 'login' }
+    }
+
+    //查看用户信息是否存在
+    if(localStorage.getItem('isLoggedIn') && (userStore.username == null || userStore.username == '')){
+        getCurrentUserDetail();
     }
 })
 

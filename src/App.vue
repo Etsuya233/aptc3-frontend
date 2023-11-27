@@ -5,11 +5,13 @@
                 <h1 class="item">APTC</h1>
             </el-header>
 
-            <el-main>
+            <el-main class="main">
                 <RouterView />
             </el-main>
             
-            <el-footer>Footer</el-footer>
+            <el-footer class="footer">
+                
+            </el-footer>
         </el-container>
     </div>  
 </template>

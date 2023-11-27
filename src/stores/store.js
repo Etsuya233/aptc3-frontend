@@ -1,6 +1,5 @@
 import {defineStore} from 'pinia'
-import {reactive, ref} from 'vue'
-
+import {computed, reactive, ref} from 'vue'
 
 export const useUserStore = defineStore('user', () => {
     let isLoggedIn = ref(false);
@@ -24,6 +23,7 @@ export const useUserStore = defineStore('user', () => {
         pttB30.value = '';
         pptR10.value = '';
     }
+    
 })
 
 export default useUserStore;

@@ -12,5 +12,14 @@
     padding: auto;
     margin-top: auto;
     margin-bottom: auto;
+}
 
+.main{
+    padding: 0%;
+}
+
+.footer {
+    background-color: aliceblue;
+    box-sizing: border-box;
+    /* border-top: gainsboro solid; */
 }

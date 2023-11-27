@@ -1,0 +1,13 @@
+.aside {
+    width: 200px;
+    background-color: azure;
+    height: 100%;
+}
+
+.main{
+    height: 100%;
+}
+
+.common {
+    height: 100%;
+}

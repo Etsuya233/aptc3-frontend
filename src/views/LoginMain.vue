@@ -3,12 +3,12 @@
         <h1>Login</h1>
     </div>
     <div class="input">
-        <el-form :model="form" label-width="120">
-            <el-form-item label="Username">
-                <el-input placeholder="" v-model="form.username"></el-input>
+        <el-form :model="form" >
+            <el-form-item label="">
+                <el-input placeholder="Username" v-model="form.username"></el-input>
             </el-form-item>
-            <el-form-item label="Password">
-                <el-input placeholder="" v-model="form.password" type="password"></el-input>
+            <el-form-item label="">
+                <el-input placeholder="Password" v-model="form.password" type="password"></el-input>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onLoginSubmit">Login</el-button>
@@ -22,7 +22,6 @@
 import {ref, reactive} from 'vue'
 import {login} from '@/api/user.js'
 import { useUserStore } from '@/stores/store';
-
 
 const form = reactive({
     username: '',
