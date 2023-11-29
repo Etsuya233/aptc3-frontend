@@ -6,10 +6,6 @@
         </el-aside>
 
         <el-main class="main">
-            {{ store.token }}
-            {{ store.isLoggedIn }}
-            <h1 style="text-align: center;">User Page</h1>
-            <h3 style="text-align: center;">{{ store.username }}</h3>
             <RouterView />
         </el-main>
 

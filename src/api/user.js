@@ -7,7 +7,7 @@ const userStore = useUserStore(pinia)
 
 export const login = (userLoginDTO) => {
     axioss({
-        url: '/user/login',
+        url: '/user/user/login',
         method: 'post',
         data: userLoginDTO,
     }).then((response) => {
@@ -33,7 +33,7 @@ export const login = (userLoginDTO) => {
 
 export const getCurrentUserDetail = () => {
     axioss({
-        url: '/user/current',
+        url: '/user/user/current',
         method: 'GET',
     }).then((response) => {
         //将用户信息保存至pinia

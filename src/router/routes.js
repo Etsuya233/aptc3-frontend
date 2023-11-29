@@ -25,7 +25,12 @@ const router = createRouter({
                 {
                     path: 'score',
                     name: 'score',
-                    component: () => import('@/components/SongScore.vue'),
+                    component: () => import('@/views/SongScore.vue'),
+                },  
+                {
+                    path: 'info',
+                    name: 'userinfo',
+                    component: () => import('@/components/UserInfo.vue'),
                 }
             ]
         }
