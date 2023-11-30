@@ -4,10 +4,9 @@ import { useUserStore } from "@/stores/store.js";
 
 const userStore = useUserStore(pinia)
 
-export const getAllScore = async (userScoreQueryDTO) => {
+export const getAllPack = async () => {
     return axioss({
-        url: '/user/score',
-        method: 'post',
-        data: userScoreQueryDTO
+        url: '/user/pack',
+        method: 'get',
     });
 }

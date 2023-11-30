@@ -27,7 +27,7 @@ export const login = (userLoginDTO) => {
         localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', true);
 
-        router.push({name: 'user'});
+        router.push({name: 'userinfo'});
     })
 }
 

@@ -1,6 +1,6 @@
 .aside {
     width: 200px;
-    background-color: azure;
+    /* background-color: azure; */
     height: 100%;
 }
 
@@ -10,4 +10,12 @@
 
 .common {
     height: 100%;
+}
+
+.menu {
+    height: 100%;
+}
+
+el-menu el-menu-item {
+    
 }
