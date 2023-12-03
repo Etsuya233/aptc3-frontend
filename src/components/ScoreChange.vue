@@ -34,6 +34,10 @@
             <el-form-item label="Beyond" v-show="type === 0 || type === 4 || type === 5">
                 <el-input v-model="scoreNew.bydScore" />
             </el-form-item>
+            <el-form-item>
+                <el-button type="primary">更新</el-button>
+                <el-button type="warning" @click="$emit('handleClose')">取消</el-button>
+            </el-form-item>
         </el-form>
     </el-dialog>
 </template>

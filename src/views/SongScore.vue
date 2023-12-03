@@ -12,7 +12,7 @@
         <div class="operation">
             <el-row :gutter="5">
                 <el-col :span="8">
-                    <el-input  v-model="sname" placeholder="歌曲名" @keyup.enter="handleSearch"></el-input>
+                    <el-input  v-model="sname" placeholder="歌曲名" @keyup.enter="handleSearch" clearable></el-input>
                 </el-col>
                 <el-col :span="6">
                     <el-select v-model="pid" clearable placeholder="请选择曲包" value-key="pid" @change="handlePackChange">
