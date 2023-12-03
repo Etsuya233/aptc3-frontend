@@ -1,5 +1,13 @@
 <template>
     <div class="container">
+        
+        <ScoreChange 
+        :visible="scoreChangeInfo.visible" 
+        :type="scoreChangeInfo.type"
+        :scoreData="scoreChangeInfo.scoreData"
+        :songs="songs"
+        :packs="packs"
+        @handle-close="handleScoreChangeClose" />
 
         <div class="operation">
             <el-row :gutter="5">
@@ -18,33 +26,38 @@
                 </el-col>
                 <el-col :span="4"></el-col>
                 <el-col :span="6">
-                    <el-button>新增</el-button>
+                    <el-button @click="handleNew">新增</el-button>
                 </el-col>
             </el-row>
         </div>
 
         <div class="scoretable">
             <el-table :data="records" style="width: 100%">
-                <el-table-column fixed prop="sname" min-width="120px" label="歌曲名" />
+                <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column label="Present">
-                    <el-table-column prop="pst" min-width="50px" label="难度"  />
-                    <el-table-column prop="pstScore" min-width="80px" label="成绩"  />
-                    <el-table-column prop="pstPtt" min-width="50px" label="定数"  />
+                    <el-table-column prop="pst" min-width="60px" label="难度"  />
+                    <el-table-column prop="pstScore" min-width="100px" label="成绩"  />
+                    <el-table-column prop="pstPtt" min-width="60px" label="定数"  />
                 </el-table-column>
                 <el-table-column label="Past">
-                    <el-table-column prop="prs" min-width="50px" label="难度"  />
-                    <el-table-column prop="prsScore" min-width="80px" label="成绩"  />
-                    <el-table-column prop="prsPtt" min-width="50px" label="定数"  />
+                    <el-table-column prop="prs" min-width="60px" label="难度"  />
+                    <el-table-column prop="prsScore" min-width="100px" label="成绩"  />
+                    <el-table-column prop="prsPtt" min-width="60px" label="定数"  />
                 </el-table-column>
                 <el-table-column label="Future">
-                    <el-table-column prop="ftr"  min-width="50px" label="难度"  />
-                    <el-table-column prop="ftrScore" min-width="80px" label="成绩"  />
-                    <el-table-column prop="ftrPtt" min-width="50px" label="定数"  />
+                    <el-table-column prop="ftr"  min-width="60px" label="难度"  />
+                    <el-table-column prop="ftrScore" min-width="100px" label="成绩"  />
+                    <el-table-column prop="ftrPtt" min-width="60px" label="定数"  />
                 </el-table-column>
                 <el-table-column label="Beyond">
-                    <el-table-column prop="byd" min-width="50px" label="难度"  />
-                    <el-table-column prop="bydScore" min-width="80px" label="成绩"  />
-                    <el-table-column prop="bydPtt" min-width="50px" label="定数"  />
+                    <el-table-column prop="byd" min-width="60px" label="难度"  />
+                    <el-table-column prop="bydScore" min-width="100px" label="成绩"  />
+                    <el-table-column prop="bydPtt" min-width="60px" label="定数"  />
+                </el-table-column>
+                <el-table-column fixed="right" min-width="60px" label="操作">
+                    <template v-slot="scope">
+                        <el-button link type="primary" @click="handleTableChangeScore(scope.$index)">编辑</el-button>
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -69,6 +82,8 @@
 import { ref, reactive, onMounted } from 'vue';
 import { getAllScore } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
+import { getAllSongs } from '@/api/song.js';
+import ScoreChange from '@/components/ScoreChange.vue';
 
 let records = ref([]);
 let total = ref(0);
@@ -80,6 +95,8 @@ let sname = ref('');
 let pid = ref(null);
 
 let packs = ref([]);
+
+let songs = ref([]);
 
 let userScoreQueryDTO = reactive({
     sname: sname.value,
@@ -114,9 +131,15 @@ async function updatePack(){
     packs.value = response.data.data;
 }
 
+async function updateSongs(){
+    let response = await getAllSongs();
+    songs.value = response.data.data;
+}
+
 onMounted(() => {
     updateScoreList();
     updatePack();
+    updateSongs();
 })
 
 function handleSearch(){
@@ -127,6 +150,29 @@ function handleSearch(){
     updateScoreList(userScoreQueryDTO);
 }
 
+//成绩更改界面：
+let scoreChangeInfo = reactive({
+    visible: false,
+    type: 1,
+    scoreData: {},
+})
+
+function handleNew(){
+    scoreChangeInfo.type = 5;
+    scoreChangeInfo.scoreData = reactive({});
+    scoreChangeInfo.visible = true;
+}
+
+function handleScoreChangeClose(){
+    scoreChangeInfo.visible = false;
+}
+
+//表格成绩更改
+function handleTableChangeScore(index){
+    scoreChangeInfo.type = 0;
+    scoreChangeInfo.scoreData = (records.value)[index];
+    scoreChangeInfo.visible = true;
+}
 
 </script>
 
