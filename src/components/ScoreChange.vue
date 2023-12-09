@@ -1,5 +1,5 @@
 <template>
-    <el-dialog v-model="visible" title="修改成绩" @close="$emit('handleClose')">
+    <el-dialog v-model="visible" title="修改成绩" @close="$emit('handleClose', false)">
         <el-form ref="form" label-width="80px">
             <el-form-item label="Song">
                 <el-autocomplete
@@ -23,22 +23,27 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="Past" v-show="type === 0 || type === 1 || type === 5">
-                <el-row :gutter="5">
-                    <el-row :span="18"><el-input v-model="scoreNew.pstScore" /></el-row>
-                    <el-row :span="4">定数：{{ pstPttGetter }}</el-row>
-                </el-row>                
+                <el-col :span="18"><el-input v-model="scoreNew.pstScore" :disabled="scoreNew.pst === null || scoreNew.pst === undefined || scoreNew.pst === 0"/></el-col>
+                <el-col :span="1"></el-col>
+                <el-col :span="4">定数：{{ pstPttGetter }}</el-col>
             </el-form-item>
             <el-form-item label="Present" v-show="type === 0 || type === 2 || type === 5">
-                <el-input v-model="scoreNew.prsScore" />
+                <el-col :span="18"><el-input v-model="scoreNew.prsScore" :disabled="scoreNew.prs === null || scoreNew.prs === undefined || scoreNew.prs === 0"/></el-col>
+                <el-col :span="1"></el-col>
+                <el-col :span="4">定数：{{ prsPttGetter }}</el-col>
             </el-form-item>
             <el-form-item label="Future" v-show="type === 0 || type === 3 || type === 5">
-                <el-input v-model="scoreNew.ftrScore" />
+                <el-col :span="18"><el-input v-model="scoreNew.ftrScore" :disabled="scoreNew.ftr === null || scoreNew.ftr === undefined || scoreNew.ftr === 0"/></el-col>
+                <el-col :span="1"></el-col>
+                <el-col :span="4">定数：{{ ftrPttGetter }}</el-col>
             </el-form-item>
             <el-form-item label="Beyond" v-show="type === 0 || type === 4 || type === 5">
-                <el-input v-model="scoreNew.bydScore" />
+                <el-col :span="18"><el-input v-model="scoreNew.bydScore" :disabled="scoreNew.byd === null || scoreNew.byd === undefined || scoreNew.byd === 0"/></el-col>
+                <el-col :span="1"></el-col>
+                <el-col :span="4">定数：{{ bydPttGetter }}</el-col>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary">更新</el-button>
+                <el-button type="primary" @click="handleSubmit">更新</el-button>
                 <el-button type="warning" @click="$emit('handleClose')">取消</el-button>
             </el-form-item>
         </el-form>
@@ -48,6 +53,7 @@
 <script setup>
 import { ref, reactive, watch, toRefs, toRef, shallowRef, toRaw, computed } from 'vue';
 import { empty } from '@/hooks/object.js';
+import { updateScore } from '@/api/score.js';
 
 //type 0:4个难度都有 1234:对应每个难度 5:新增歌曲！
 const props = defineProps(['type', 'visible', 'scoreData', 'songs', 'packs']);
@@ -87,24 +93,38 @@ function getPotential(score, difficulty){
 
 //更新定数
 let pstPttGetter = computed(() => {
-    return (scoreNew.pstScore === undefined || scoreNew.pstScore === null || scoreNew.pstScore === '')? 0: getPotential(scoreNew.pstScore, scoreNew.pst);
+    return (scoreNew.pstScore === undefined || scoreNew.pstScore === null || scoreNew.pstScore === '')? 
+        0: getPotential(scoreNew.pstScore, scoreNew.pst).toFixed(2);
 })
 let prsPttGetter = computed(() => {
     return (scoreNew.prsScore === undefined || scoreNew.prsScore === null || scoreNew.prsScore === '')? 
-        0:
-        getPotential(scoreNew.prsScore, scoreNew.prs);
+        0: getPotential(scoreNew.prsScore, scoreNew.prs).toFixed(2);
 })
 let ftrPttGetter = computed(() => {
     return (scoreNew.ftrScore === undefined || scoreNew.ftrScore === null || scoreNew.ftrScore === '')? 
-        0:
-        getPotential(scoreNew.ftrScore, scoreNew.ftr);
+        0: getPotential(scoreNew.ftrScore, scoreNew.ftr).toFixed(2);
 })
 let bydPttGetter = computed(() => {
     return (scoreNew.bydScore === undefined || scoreNew.bydScore === null || scoreNew.bydScore === '')? 
-        0:
-        getPotential(scoreNew.bydScore, scoreNew.byd);
+        0: getPotential(scoreNew.bydScore, scoreNew.byd).toFixed(2);
 })
+
+
 //更新/添加成绩
+async function handleSubmit(){
+    scoreNew.pstPtt = pstPttGetter.value;
+    scoreNew.prsPtt = prsPttGetter.value;
+    scoreNew.ftrPtt = ftrPttGetter.value;
+    scoreNew.bydPtt = bydPttGetter.value;
+    scoreNew.type = type.value;
+    console.log(scoreNew);
+    let response = await updateScore(toRaw(scoreNew));
+    if(response.data.code === 200){
+        console.log('成功！');
+    }
+    emits('handleClose', true, scoreNew.sname);
+    
+}
 
 
 </script>

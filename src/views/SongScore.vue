@@ -83,6 +83,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { getAllScore } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
+import { ElNotification } from 'element-plus';
 import ScoreChange from '@/components/ScoreChange.vue';
 
 let records = ref([]);
@@ -163,8 +164,16 @@ function handleNew(){
     scoreChangeInfo.visible = true;
 }
 
-function handleScoreChangeClose(){
+function handleScoreChangeClose(refresh, sname){
     scoreChangeInfo.visible = false;
+    if(refresh) {
+        updateScoreList();
+        ElNotification({
+            title: '成绩添加/更新成功',
+            message: `歌曲名称：${sname}`,
+            type: 'success',
+        })
+    }
 }
 
 //表格成绩更改

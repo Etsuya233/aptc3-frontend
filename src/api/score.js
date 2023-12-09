@@ -11,3 +11,11 @@ export const getAllScore = async (userScoreQueryDTO) => {
         data: userScoreQueryDTO
     });
 }
+
+export const updateScore = async (userScoreVO) => {
+    return axioss({
+        url: `/user/score/${userScoreVO.sid}`,
+        method: 'post',
+        data: userScoreVO
+    });
+}
