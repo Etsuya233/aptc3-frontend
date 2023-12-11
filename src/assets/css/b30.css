@@ -1,0 +1,29 @@
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.scoretable {
+    height: 90%;
+    padding: 10px;
+    border: 1px solid gainsboro;
+    border-radius: 5px;
+    overflow: scroll;
+}
+
+.el-table .pst-row {
+    --el-table-tr-bg-color: #EAF2F8;
+}
+
+.el-table .prs-row {
+    --el-table-tr-bg-color: #E9F7EF;
+}
+
+.el-table .ftr-row {
+    --el-table-tr-bg-color: #F5EEF8;
+}
+
+.el-table .byd-row {
+    --el-table-tr-bg-color: #F9EBEA;
+}

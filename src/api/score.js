@@ -19,3 +19,13 @@ export const updateScore = async (userScoreVO) => {
         data: userScoreVO
     });
 }
+
+export const getB30 = async (val) => {
+    return axioss({
+        url: '/user/score/b30',
+        method: 'get',
+        params: {
+            pageSize: val,
+        }
+    });
+}

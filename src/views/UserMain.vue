@@ -11,6 +11,9 @@
                 <el-menu-item index="/user/score">
                     成绩列表
                 </el-menu-item>
+                <el-menu-item index="/user/b30">
+                    B30
+                </el-menu-item>
             </el-menu>
         </el-aside>
 

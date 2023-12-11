@@ -34,18 +34,16 @@ const router = createRouter({
                     path: 'score',
                     name: 'score',
                     component: () => import('@/views/SongScore.vue'),
-                    // children: [
-                    //     {
-                    //         path: ':sid',
-                    //         name: 'scorechange',
-                    //         component: () => import('@/components/SongChange.vue')
-                    //     }
-                    // ]
                 },
                 {
                     path: 'info',
                     name: 'userinfo',
                     component: () => import('@/components/UserInfo.vue'),
+                },
+                {
+                    path: 'b30',
+                    name: 'b30',
+                    component: () => import('@/views/B30.vue')
                 }
             ]
         }
