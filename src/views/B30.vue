@@ -10,20 +10,20 @@
                 <el-table-column prop="time" label="时间" min-width="120px" />
             </el-table>
         </div>
-        <div class="footer">
-            <el-row :gutter="5">
-                <el-col :span="19"></el-col>
-                <el-col :span="5">
-                    <el-pagination
-                    layout="total, sizes"
-                    :total="total"
-                    :page-sizes="[30, 50, 100, 200, 500]"
-                    :default-page-size="30"
-                    @size-change="updateB30(val)"
-                    v-model:page-size="pageSize"
-                    />
-                </el-col>
-            </el-row>
+        <div class="b30footer">
+            <div class="item">
+                <el-button>导出</el-button>
+            </div>
+            <div class="item">
+                <el-pagination
+                layout="total, sizes"
+                :total="total"
+                :page-sizes="[30, 50, 100, 200, 500]"
+                :default-page-size="30"
+                @size-change="updateB30(val)"
+                v-model:page-size="pageSize"
+                />
+            </div>
         </div>
     </div>
 </template>

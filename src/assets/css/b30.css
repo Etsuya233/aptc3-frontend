@@ -12,6 +12,16 @@
     overflow: scroll;
 }
 
+.b30footer {
+    margin: 10px;
+    display: flex;
+    align-content: center;   
+}
+
+.b30footer .item {
+    padding: 0px 10px;
+}
+
 .el-table .pst-row {
     --el-table-tr-bg-color: #EAF2F8;
 }

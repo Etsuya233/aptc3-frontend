@@ -29,3 +29,14 @@ export const getB30 = async (val) => {
         }
     });
 }
+
+export const updatePTT = async () => {
+    axioss({
+        url: '/user/score/ptt',
+        method: 'put',
+    }).then((response) => {
+        userStore.ptt = response.data.data.ptt;
+        userStore.pttR10 = response.data.data.pttR10;
+        userStore.pttB30 = response.data.data.pttB30;
+    });
+}

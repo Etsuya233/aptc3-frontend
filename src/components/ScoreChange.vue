@@ -54,6 +54,7 @@
 import { ref, reactive, watch, toRefs, toRef, shallowRef, toRaw, computed } from 'vue';
 import { empty } from '@/hooks/object.js';
 import { updateScore } from '@/api/score.js';
+import { updatePTT } from '../api/score';
 
 //type 0:4个难度都有 1234:对应每个难度 5:新增歌曲！
 const props = defineProps(['type', 'visible', 'scoreData', 'songs', 'packs']);
@@ -121,6 +122,7 @@ async function handleSubmit(){
     let response = await updateScore(toRaw(scoreNew));
     if(response.data.code === 200){
         console.log('成功！');
+        updatePTT();
     }
     emits('handleClose', true, scoreNew.sname);
     
