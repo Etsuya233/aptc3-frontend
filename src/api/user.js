@@ -48,3 +48,7 @@ export const getCurrentUserDetail = () => {
         userStore.pttR10 = response.data.data.pttR10;
     })
 }
+
+export const register = () => {
+    
+}
