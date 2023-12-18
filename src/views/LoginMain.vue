@@ -12,7 +12,7 @@
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="onLoginSubmit">Login</el-button>
-                <el-button type="info">Register</el-button>
+                <el-button type="info" @click="router.push('register')">Register</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -22,6 +22,9 @@
 import {ref, reactive} from 'vue'
 import {login} from '@/api/user.js'
 import { useUserStore } from '@/stores/store';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const form = reactive({
     username: '',

@@ -1,22 +1,23 @@
 <template>
     <div class="main">
         <h1>注册</h1>
+        <el-button @click="testBox">Click</el-button>
     </div>
     <div class="input">
         <el-row>
             <el-col :span="8"></el-col>
             <el-col :span="8">
                 <el-form :model="form" label-position="top" :rules="rules">
-                    <el-form-item label="用户名">
-                        <el-input  v-model="form.username"></el-input>
+                    <el-form-item label="用户名" prop="username">
+                        <el-input  v-model="form.username" ></el-input>
                     </el-form-item>
-                    <el-form-item label="密码">
+                    <el-form-item label="密码" prop="password">
                         <el-input v-model="form.password" type="password"></el-input>
                     </el-form-item>
-                    <el-form-item label="Arcaea ID（选填）">
+                    <el-form-item label="Arcaea ID（选填）" prop="arcId">
                         <el-input v-model="form.arcId"></el-input>
                     </el-form-item>
-                    <el-form-item label="E-mail（必填，用于找回密码）">
+                    <el-form-item label="E-mail（必填，用于找回密码）" prop="email">
                         <el-input v-model="form.email"></el-input>
                     </el-form-item>
                     <el-form-item>
@@ -30,10 +31,11 @@
 </template>
 
 <script setup>
-import {ref, reactive} from 'vue'
+import {ref, reactive, toRaw} from 'vue'
 import regexet from '@/util/regexet.js'
-import { register } from '@/api/user.js'
+import { register, count, login } from '@/api/user.js'
 import { useUserStore } from '@/stores/store';
+import { ElMessageBox } from 'element-plus';
 
 const form = reactive({
     username: '',
@@ -46,17 +48,50 @@ const rules = reactive({
     username: [
         { required: true, message: '请输入用户名', trigger: 'blur'},
         { min: 3, max: 15, message: '字数须在3-15之间', trigger: 'blur'},
-        
+        //该用户名已被使用
+        {
+            async validator(rule, value, callback, source, options) {
+                let response = await count({username: value});
+                if(response.data.data == 0){
+                    callback();
+                } else callback(new Error());
+            },
+            message: '用户名已被使用',
+            trigger: 'blur'
+        }
     ],
     password: [
         { required: true, message: '请输入密码', trigger: 'blur'},
         { min: 3, max: 15, message: '字数须在3-15之间', trigger: 'blur'},
+    ],
+    email: [
+        { required: true, message: '请输入邮箱', trigger: 'blur'},
+        { type: 'email', message: '请输入正确的邮箱', trigger: 'blur'},
+        //该邮箱已被使用
+        {
+            async validator(rule, value, callback, source, options) {
+                let response = await count({email: value});
+                if(response.data.data == 0){
+                    callback();
+                } else callback(new Error());
+            },
+            message: '邮箱已被使用',
+            trigger: 'blur'
+        }
     ]
 })
 
-function onLoginSubmit(){
-    register();
+async function onRegisterSubmit(){
+    let response = await register(toRaw(form));
+    if(response.data.code == 200){
+        ElMessageBox.alert('即将跳转登陆页面。', '注册成功！');
+    }
 }  
+
+function testBox(){
+    ElMessageBox.alert('即将跳转登陆页面。', '注册成功！');
+}
+
 </script>
 
 <style scoped>

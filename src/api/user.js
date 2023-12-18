@@ -49,6 +49,18 @@ export const getCurrentUserDetail = () => {
     })
 }
 
-export const register = () => {
-    
+export const register = (registerDTO) => {
+    return axioss({
+        url: '/user/user/register',
+        method: 'post',
+        data: registerDTO
+    });
+}
+
+export const count = async (userCountDTO) => {
+    return axioss({
+        url: '/user/user/count',
+        method: 'post',
+        data: userCountDTO
+    });
 }
