@@ -1,7 +1,6 @@
 <template>
     <div class="main">
         <h1>注册</h1>
-        <el-button @click="testBox">Click</el-button>
     </div>
     <div class="input">
         <el-row>
@@ -35,7 +34,9 @@ import {ref, reactive, toRaw} from 'vue'
 import regexet from '@/util/regexet.js'
 import { register, count, login } from '@/api/user.js'
 import { useUserStore } from '@/stores/store';
-import { ElMessageBox } from 'element-plus';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const form = reactive({
     username: '',
@@ -84,7 +85,13 @@ const rules = reactive({
 async function onRegisterSubmit(){
     let response = await register(toRaw(form));
     if(response.data.code == 200){
-        ElMessageBox.alert('即将跳转登陆页面。', '注册成功！');
+        ElNotification({
+            title: '注册成功',
+            message: '即将跳转登陆页面...',
+        });
+        setTimeout(() => {
+            router.push('login');
+        }, 3000);
     }
 }  
 

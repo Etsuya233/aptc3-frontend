@@ -83,7 +83,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { getAllScore } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
-import { ElNotification } from 'element-plus';
+// import { ElNotification } from 'element-plus';
 import ScoreChange from '@/components/ScoreChange.vue';
 
 let records = ref([]);
