@@ -32,7 +32,7 @@
         </div>
 
         <div class="scoretable">
-            <el-table :data="records" style="width: 100%">
+            <el-table :data="records" style="width: 100%" v-loading="loading">
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column label="Present">
                     <el-table-column prop="pst" min-width="60px" label="难度"  />
@@ -74,7 +74,6 @@
                 @current-change="handleCurrentChange"
                 />
         </div>
-
     </div>
 </template>
 
@@ -83,7 +82,6 @@ import { ref, reactive, onMounted } from 'vue';
 import { getAllScore } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
-// import { ElNotification } from 'element-plus';
 import ScoreChange from '@/components/ScoreChange.vue';
 
 let records = ref([]);
@@ -98,6 +96,8 @@ let pid = ref(null);
 let packs = ref([]);
 
 let songs = ref([]);
+
+let loading = ref(false);
 
 let userScoreQueryDTO = reactive({
     sname: sname.value,
@@ -122,19 +122,49 @@ function handlePackChange(){
 }
 
 async function updateScoreList(){
-    let response = await getAllScore(userScoreQueryDTO);
-    records.value = response.data.data.records;
-    total.value = response.data.data.total;  
+    loading.value = true;
+    try{
+        let response = await getAllScore(userScoreQueryDTO);
+        records.value = response.data.data.records;
+        total.value = response.data.data.total;  
+        setTimeout(() => {
+            router.push('login');
+        }, 3000);
+    } catch (error) {
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: `${error.name}: ${error.message}`
+        })
+    } finally {
+        loading.value = false;
+    }
 }
 
 async function updatePack(){
-    let response = await getAllPack();
-    packs.value = response.data.data;
+    try {
+        let response = await getAllPack();
+        packs.value = response.data.data;
+    } catch (error) {
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: `${error.name}: ${error.message}`
+        })
+    }
 }
 
 async function updateSongs(){
-    let response = await getAllSongs();
-    songs.value = response.data.data;
+    try {
+        let response = await getAllSongs();
+        songs.value = response.data.data;
+    } catch (error) {
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: `${error.name}: ${error.message}`
+        })
+    }
 }
 
 onMounted(() => {

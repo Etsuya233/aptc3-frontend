@@ -1,6 +1,7 @@
 <template>
     <div class="main">
         <h1>注册</h1>
+        <el-button @click="testBox">Test</el-button>
     </div>
     <div class="input">
         <el-row>
@@ -37,6 +38,11 @@ import { useUserStore } from '@/stores/store';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+//TODO 实现统一推送！ -> 没必要？反正都是全局
+//TODO 实现请求错误的处理！推送！
+//TODO 利用Snippet配置validator！
+//TODO 统一字体
 
 const form = reactive({
     username: '',
@@ -79,25 +85,32 @@ const rules = reactive({
             message: '邮箱已被使用',
             trigger: 'blur'
         }
+    ],
+    arcId: [
+        { type: 'number', message: '请输入数字', trigger: 'blur'},
+        { max: 9, message: '已超过最大长度（9），请检查', trigger: 'blur'},
     ]
 })
 
 async function onRegisterSubmit(){
-    let response = await register(toRaw(form));
-    if(response.data.code == 200){
+    try{
+        await register(toRaw(form));
         ElNotification({
             title: '注册成功',
-            message: '即将跳转登陆页面...',
+            message: '3秒将跳转登陆页面...',
+            type: 'success',
         });
         setTimeout(() => {
             router.push('login');
         }, 3000);
+    } catch (error) {
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: error.message
+        })
     }
 }  
-
-function testBox(){
-    ElMessageBox.alert('即将跳转登陆页面。', '注册成功！');
-}
 
 </script>
 

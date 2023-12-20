@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div class="scoretable">
+        <div class="scoretable" v-loading="loading">
             <el-table :data="records" style="width: 100%" border :row-class-name="rowClassName">
                 <el-table-column fixed type="index" label="排名" min-width="30px" />
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
@@ -31,16 +31,28 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
 import { getB30 } from '@/api/score.js';
-import { ElNotification } from 'element-plus';
 
 let total = ref(0);
 let records = ref([]);
 let pageSize = ref(30);
 
+let loading = ref(false);
+
 async function updateB30(){
-    let response = await getB30(pageSize.value);
-    records.value = response.data.data;
-    total.value = response.data.data.length;
+    try{
+        loading.value = true;
+        let response = await getB30(pageSize.value);
+        records.value = response.data.data;
+        total.value = response.data.data.length;
+    } catch (error) {
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: error.message
+        })
+    } finally {
+        loading.value = false;
+    }
 }
 
 function rowClassName({row, rowIndex}){

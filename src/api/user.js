@@ -5,7 +5,7 @@ import router from "@/router/routes";
 
 const userStore = useUserStore(pinia)
 
-export const login = (userLoginDTO) => {
+export const login = async (userLoginDTO) => {
     axioss({
         url: '/user/user/login',
         method: 'post',
@@ -26,12 +26,10 @@ export const login = (userLoginDTO) => {
         let token = response.data.data.token;
         localStorage.setItem('token', token);
         localStorage.setItem('isLoggedIn', true);
-
-        router.push({name: 'userinfo'});
     })
 }
 
-export const getCurrentUserDetail = () => {
+export const getCurrentUserDetail = async () => {
     axioss({
         url: '/user/user/current',
         method: 'GET',
@@ -49,7 +47,7 @@ export const getCurrentUserDetail = () => {
     })
 }
 
-export const register = (registerDTO) => {
+export const register = async (registerDTO) => {
     return axioss({
         url: '/user/user/register',
         method: 'post',

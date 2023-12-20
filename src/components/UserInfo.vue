@@ -14,10 +14,28 @@
 import {ref, reactive} from 'vue';
 import {useUserStore} from '@/stores/store'
 import { updatePTT } from '../api/score';
+
 const userStore = useUserStore();
 
-function updateMyPTT(){
-    updatePTT();
+async function updateMyPTT(){
+    try {
+        let response = await updatePTT();
+        userStore.ptt = response.data.data.ptt;
+        userStore.pttR10 = response.data.data.pttR10;
+        userStore.pttB30 = response.data.data.pttB30;
+        ElNotification({
+            title: 'PTT更新成功',
+            type: 'success'
+        })
+    } catch (error) {
+        console.log(error);
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: `${error.name}: ${error.message}`
+        })
+    }
+
 }
 
 

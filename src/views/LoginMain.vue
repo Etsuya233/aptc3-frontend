@@ -32,7 +32,21 @@ const form = reactive({
 });
 
 function onLoginSubmit(){
-    login(form)
+    try {
+        login(form)
+        ElNotification({
+            title: `登陆成功`,
+            message: `欢迎回来，${form.username}.`,
+            type: 'success'
+        })
+        router.push('/user/info');
+    } catch (error) {
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: `${error.name}: ${error.message}`
+        })
+    }
 }
 </script>
 
