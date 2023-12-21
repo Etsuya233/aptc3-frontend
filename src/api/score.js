@@ -36,3 +36,10 @@ export const updatePTT = async () => {
         method: 'put',
     })
 }
+
+export const importScore = async () => {
+    return axioss({
+        url: '/user/score/import',
+        method: 'put',
+    })
+}

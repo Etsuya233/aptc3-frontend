@@ -25,8 +25,11 @@
                     </el-select>
                 </el-col>
                 <el-col :span="4"></el-col>
-                <el-col :span="6">
+                <el-col :span="3">
                     <el-button @click="handleNew">新增</el-button>
+                </el-col>
+                <el-col :span="3">
+                    <el-button @click="handleImport">导入</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -37,22 +40,22 @@
                 <el-table-column label="Present">
                     <el-table-column prop="pst" min-width="60px" label="难度"  />
                     <el-table-column prop="pstScore" min-width="100px" label="成绩"  />
-                    <el-table-column prop="pstPtt" min-width="60px" label="定数"  />
+                    <el-table-column prop="pstPtt" min-width="60px" label="定数" :formatter="formatter" />
                 </el-table-column>
                 <el-table-column label="Past">
                     <el-table-column prop="prs" min-width="60px" label="难度"  />
                     <el-table-column prop="prsScore" min-width="100px" label="成绩"  />
-                    <el-table-column prop="prsPtt" min-width="60px" label="定数"  />
+                    <el-table-column prop="prsPtt" min-width="60px" label="定数" :formatter="formatter" />
                 </el-table-column>
                 <el-table-column label="Future">
                     <el-table-column prop="ftr"  min-width="60px" label="难度"  />
                     <el-table-column prop="ftrScore" min-width="100px" label="成绩"  />
-                    <el-table-column prop="ftrPtt" min-width="60px" label="定数"  />
+                    <el-table-column prop="ftrPtt" min-width="60px" label="定数" :formatter="formatter" />
                 </el-table-column>
                 <el-table-column label="Beyond">
                     <el-table-column prop="byd" min-width="60px" label="难度"  />
                     <el-table-column prop="bydScore" min-width="100px" label="成绩"  />
-                    <el-table-column prop="bydPtt" min-width="60px" label="定数"  />
+                    <el-table-column prop="bydPtt" min-width="60px" label="定数" :formatter="formatter" />
                 </el-table-column>
                 <el-table-column fixed="right" min-width="60px" label="操作">
                     <template v-slot="scope">
@@ -79,7 +82,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import { getAllScore } from '@/api/score.js';
+import { getAllScore, importScore } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
 import ScoreChange from '@/components/ScoreChange.vue';
@@ -167,10 +170,10 @@ async function updateSongs(){
     }
 }
 
-onMounted(() => {
-    updateScoreList();
-    updatePack();
-    updateSongs();
+onMounted(async () => {
+    await updateScoreList();
+    await updatePack();
+    await updateSongs();
 })
 
 function handleSearch(){
@@ -179,6 +182,11 @@ function handleSearch(){
     userScoreQueryDTO.pageNum = pageNum.value;
     userScoreQueryDTO.pageSize = pageSize.value;
     updateScoreList(userScoreQueryDTO);
+}
+
+//TODO 解决warn！！！
+function formatter(row, column, cellValue, index){
+    return (cellValue != null)? cellValue.toFixed(2): null;
 }
 
 //成绩更改界面：
@@ -211,6 +219,18 @@ function handleTableChangeScore(index){
     scoreChangeInfo.type = 0;
     scoreChangeInfo.scoreData = (records.value)[index];
     scoreChangeInfo.visible = true;
+}
+
+//导入
+async function handleImport(){
+    //TODO 优化这里！！！动画，二次确定，刷新数据等！表格记得也优化一下！
+    try {
+        await importScore();
+    } catch (error) {
+        
+    } finally {
+
+    }
 }
 
 </script>

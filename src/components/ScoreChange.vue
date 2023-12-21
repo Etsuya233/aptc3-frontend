@@ -87,8 +87,8 @@ function handleSelect(selected){
 //定数计算
 function getPotential(score, difficulty){
     if(score >= 10000000) return difficulty + 2;
-    else if(score >= 9800000 && score < 10000000) return difficulty + 1 + (score - 9800000) / 200000;
-    let ptt = difficulty + (score - 9500000) / 300000;
+    else if(score >= 9800000 && score < 10000000) return difficulty + 1 + 1.0 * (score - 9800000) / 200000;
+    let ptt = difficulty + 1.0 * (score - 9500000) / 300000;
     return (ptt >= 0)? ptt: 0;
 }
 

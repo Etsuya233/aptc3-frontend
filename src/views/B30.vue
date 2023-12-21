@@ -6,7 +6,7 @@
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column prop="difficulty" label="难度" min-width="50px" />
                 <el-table-column prop="score" label="成绩" min-width="100px" />
-                <el-table-column prop="ptt" label="PTT" min-width="70px" />
+                <el-table-column prop="ptt" label="PTT" min-width="70px" :formatter="formatter"/>
                 <el-table-column prop="time" label="时间" min-width="120px" />
             </el-table>
         </div>
@@ -63,6 +63,10 @@ function rowClassName({row, rowIndex}){
         case 4: return 'byd-row';
         default: return '';
     }
+}
+
+function formatter(row, column, cellValue, index){
+    return cellValue.toFixed(2);
 }
 
 onMounted(() => {
