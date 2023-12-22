@@ -7,7 +7,7 @@
         <el-row>
             <el-col :span="8"></el-col>
             <el-col :span="8">
-                <el-form :model="form" label-position="top" :rules="rules">
+                <el-form :model="form" label-position="top" :rules="rules" >
                     <el-form-item label="用户名" prop="username">
                         <el-input  v-model="form.username" ></el-input>
                     </el-form-item>

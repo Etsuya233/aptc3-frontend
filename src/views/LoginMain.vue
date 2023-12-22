@@ -25,21 +25,39 @@ import { useUserStore } from '@/stores/store';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+const userStore = useUserStore();
 
 const form = reactive({
     username: '',
     password: ''
 });
 
-function onLoginSubmit(){
+async function onLoginSubmit(){
     try {
-        login(form)
+        let response = await login(form);
+
+        //将用户信息保存至pinia
+        userStore.isLoggedInSto = true;
+        userStore.uid = response.data.data.uid;
+        userStore.arcId = response.data.data.arcId; 
+        userStore.username = response.data.data.username;
+        userStore.status = response.data.data.status;
+        userStore.tokenSto = response.data.data.token;
+        userStore.ptt = response.data.data.ptt;
+        userStore.pttB30 = response.data.data.pttB30;
+        userStore.pttR10 = response.data.data.pttR10;
+
+        //持久化保存
+        let token = response.data.data.token;
+        localStorage.setItem('token', token);
+        localStorage.setItem('isLoggedIn', true);
+
         ElNotification({
             title: `登陆成功`,
             message: `欢迎回来，${form.username}.`,
             type: 'success'
         })
-        router.push('/user/info');
+        router.push({name: 'userinfo'});
     } catch (error) {
         ElNotification({
             title: '错误',

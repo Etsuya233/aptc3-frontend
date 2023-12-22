@@ -69,7 +69,6 @@ router.beforeEach((to, from) => {
 
     //查看用户信息是否存在
     if(userStore.isLoggedIn && userStore.username == undefined){
-        console.log(userStore.isLoggedIn, userStore.username);
         getCurrentUserDetail();
     }
 })

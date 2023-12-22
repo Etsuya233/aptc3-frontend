@@ -35,7 +35,7 @@
         </div>
 
         <div class="scoretable">
-            <el-table :data="records" style="width: 100%" v-loading="loading">
+            <el-table :data="records" style="width: 100%" v-loading="loading" >
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column label="Present">
                     <el-table-column prop="pst" min-width="60px" label="难度"  />
@@ -130,9 +130,6 @@ async function updateScoreList(){
         let response = await getAllScore(userScoreQueryDTO);
         records.value = response.data.data.records;
         total.value = response.data.data.total;  
-        setTimeout(() => {
-            router.push('login');
-        }, 3000);
     } catch (error) {
         ElNotification({
             title: '错误',
@@ -170,10 +167,10 @@ async function updateSongs(){
     }
 }
 
-onMounted(async () => {
-    await updateScoreList();
-    await updatePack();
-    await updateSongs();
+onMounted(() => {
+    updateScoreList();
+    updatePack();
+    updateSongs();
 })
 
 function handleSearch(){

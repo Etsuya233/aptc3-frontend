@@ -31,9 +31,6 @@ import useUserStore from '@/stores/store.js'
 const store = useUserStore();
 const router = useRouter();
 
-
-
-
 </script>
 
 <style scoped>
