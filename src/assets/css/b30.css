@@ -22,6 +22,10 @@
     padding: 0px 10px;
 }
 
+/* .el-table {
+    --el-table-row-hover-bg-color: unset;
+} */
+
 .el-table .pst-row {
     --el-table-tr-bg-color: #EAF2F8;
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
-        <div class="scoretable" v-loading="loading">
-            <el-table :data="records" style="width: 100%" border :row-class-name="rowClassName">
+        <div class="scoretable" v-loading="loading" >
+            <el-table :data="records" style="width: 100%" border :row-class-name="rowClassName" ::highlight-current-row="false">
                 <el-table-column fixed type="index" label="排名" min-width="30px" />
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column prop="difficulty" label="难度" min-width="50px" />

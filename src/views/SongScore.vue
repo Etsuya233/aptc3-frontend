@@ -9,6 +9,11 @@
         :packs="packs"
         @handle-close="handleScoreChangeClose" />
 
+        <UploadST3 
+        :visible="uploadST3Info.visible"
+        @handle-close="handleUploadST3Close"
+        @handle-refresh="updateScoreList" />
+
         <div class="operation">
             <el-row :gutter="5">
                 <el-col :span="8">
@@ -35,7 +40,7 @@
         </div>
 
         <div class="scoretable">
-            <el-table :data="records" style="width: 100%" v-loading="loading" >
+            <el-table :data="records" style="width: 100%" v-loading="loading" :cell-style="changeCellStyle" >
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column label="Present">
                     <el-table-column prop="pst" min-width="60px" label="难度"  />
@@ -85,6 +90,7 @@ import { ref, reactive, onMounted } from 'vue';
 import { getAllScore, importScore } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
+import UploadST3 from '@/components/UploadST3.vue';
 import ScoreChange from '@/components/ScoreChange.vue';
 
 let records = ref([]);
@@ -181,9 +187,21 @@ function handleSearch(){
     updateScoreList(userScoreQueryDTO);
 }
 
-//TODO 解决warn！！！
+//表格展示
 function formatter(row, column, cellValue, index){
     return (cellValue != null)? cellValue.toFixed(2): null;
+}
+
+function changeCellStyle(cell){
+    if(cell.columnIndex >= 1 && cell.columnIndex <= 3){
+        return {'background': '#EAF2F8'};
+    } else if(cell.columnIndex >= 4 && cell.columnIndex <= 6){
+        return {'background': '#E9F7EF'};
+    } else if(cell.columnIndex >= 7 && cell.columnIndex <= 9){
+        return {'background': '#F5EEF8'};
+    } else if(cell.columnIndex >= 10 && cell.columnIndex <= 12){
+        return {'background': '#F9EBEA'};
+    }
 }
 
 //成绩更改界面：
@@ -219,15 +237,25 @@ function handleTableChangeScore(index){
 }
 
 //导入
-async function handleImport(){
-    //TODO 优化这里！！！动画，二次确定，刷新数据等！表格记得也优化一下！
-    try {
-        await importScore();
-    } catch (error) {
-        
-    } finally {
+let uploadST3Info = reactive({
+    visible: false,
+})
 
-    }
+function handleUploadST3Close(){
+    uploadST3Info.visible = false;
+}
+
+async function handleImport(){
+    uploadST3Info.visible = true;
+
+    //TODO 优化这里！！！动画，二次确定，刷新数据等！表格记得也优化一下！
+    // try {
+    //     await importScore();
+    // } catch (error) {
+        
+    // } finally {
+
+    // }
 }
 
 </script>

@@ -37,9 +37,13 @@ export const updatePTT = async () => {
     })
 }
 
-export const importScore = async () => {
+export const importScore = async (formData) => {
     return axioss({
         url: '/user/score/import',
-        method: 'put',
-    })
+        method: 'post',
+        data: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
 }
