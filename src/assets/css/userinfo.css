@@ -1,0 +1,20 @@
+@font-face{
+    font-family: exo;
+    src: url("../fonts/exo.ttf");
+}
+
+.userinfo {
+    font-family: 'exo';
+    margin: 10px;
+}
+
+.userinfo .username {
+    font-size: 3em;
+    font-weight: bold;
+    line-height: 2;
+}
+
+.userinfo .ptt {
+    font-size: 1.5em;
+    line-height: 1.5;
+}

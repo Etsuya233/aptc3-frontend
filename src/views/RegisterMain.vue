@@ -44,6 +44,7 @@ const router = useRouter();
 //TODO 利用Snippet配置validator！
 //TODO 统一字体
 //TODO 导入新的json！
+//TODO 边框全部改为border-box！！！还有margin放在container咯！！
 
 const form = reactive({
     username: '',

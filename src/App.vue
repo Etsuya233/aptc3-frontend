@@ -9,9 +9,9 @@
                 <RouterView />
             </el-main>
             
-            <el-footer class="footer">
+            <!-- <el-footer class="footer">
                 
-            </el-footer>
+            </el-footer> -->
         </el-container>
     </div>  
 </template>

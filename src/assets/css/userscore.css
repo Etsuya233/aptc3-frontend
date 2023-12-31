@@ -1,4 +1,13 @@
+@font-face{
+    font-family: geosans;
+    src: url("../fonts/geosans.ttf");
+}
+
 .scoretable {
+    font-family: 'geosans';
+    letter-spacing: 1px;
+    font-weight: 1000;
+    font-size: 1.5em;
     height: 80%;
     padding: 10px;
     border: 1px solid gainsboro;
