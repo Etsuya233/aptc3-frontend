@@ -47,3 +47,10 @@ export const importScore = async (formData) => {
         }
     });
 }
+
+export const exportSt3 = async () => {
+    return axioss({
+        url: '/user/score/export',
+        method: 'get'
+    });
+}

@@ -14,6 +14,7 @@
         @handle-close="handleUploadST3Close"
         @handle-refresh="updateScoreList" />
 
+        
         <div class="operation">
             <el-row :gutter="5">
                 <el-col :span="8">
@@ -30,11 +31,14 @@
                     </el-select>
                 </el-col>
                 <el-col :span="4"></el-col>
-                <el-col :span="3">
+                <el-col :span="2">
                     <el-button @click="handleNew">新增</el-button>
                 </el-col>
-                <el-col :span="3">
-                    <el-button @click="handleImport">导入</el-button>
+                <el-col :span="2">
+                    <el-button @click="handleExport">导出st3</el-button>
+                </el-col>
+                <el-col :span="2">
+                    <el-button @click="handleImport">导入st3</el-button>
                 </el-col>
             </el-row>
         </div>
@@ -87,7 +91,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import { getAllScore, importScore } from '@/api/score.js';
+import { getAllScore, importScore, exportSt3 } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
 import UploadST3 from '@/components/UploadST3.vue';
@@ -245,17 +249,32 @@ function handleUploadST3Close(){
     uploadST3Info.visible = false;
 }
 
-async function handleImport(){
+function handleImport(){
     uploadST3Info.visible = true;
+}
 
-    //TODO 优化这里！！！动画，二次确定，刷新数据等！表格记得也优化一下！
-    // try {
-    //     await importScore();
-    // } catch (error) {
+//导出
+async function handleExport(){
+    try {
+
+        const response = await exportSt3();
         
-    // } finally {
+        //下载文件：模拟点击按钮
+        const url = window.URL.createObjectURL(new Blob([response.data.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'export.st3');
+        document.body.appendChild(link);
+        link.click();
 
-    // }
+
+    } catch (error){
+        ElNotification({
+            title: '错误',
+            type: 'error',
+            message: `${error.name}: ${error.message}`
+        })
+    }
 }
 
 </script>
