@@ -12,7 +12,13 @@
         <UploadST3 
         :visible="uploadST3Info.visible"
         @handle-close="handleUploadST3Close"
-        @handle-refresh="updateScoreList" />
+        @handle-refresh="updateScoreList" /> 
+
+        <ScoreSt3Export
+        :visible="exportSt3Info.visible"
+        @handle-close="handleExportSt3Close"
+        @handle-export="startExportSt3"
+        />        
 
         
         <div class="operation">
@@ -96,6 +102,7 @@ import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
 import UploadST3 from '@/components/UploadST3.vue';
 import ScoreChange from '@/components/ScoreChange.vue';
+import ScoreSt3Export from '@/components/ScoreSt3Export.vue';
 
 let records = ref([]);
 let total = ref(0);
@@ -254,20 +261,31 @@ function handleImport(){
 }
 
 //导出
-async function handleExport(){
-    try {
+let exportSt3Info = reactive({
+    visible: false,
+})
 
+function handleExportSt3Close(){
+    exportSt3Info.visible = false;
+}
+
+function handleExport(){
+    exportSt3Info.visible = true;
+
+   
+}
+
+async function startExportSt3(){
+    try {
         const response = await exportSt3();
         
         //下载文件：模拟点击按钮
-        const url = window.URL.createObjectURL(new Blob([response.data.data]));
+        const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', 'export.st3');
         document.body.appendChild(link);
         link.click();
-
-
     } catch (error){
         ElNotification({
             title: '错误',
