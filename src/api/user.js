@@ -47,3 +47,16 @@ export const count = async (userCountDTO) => {
     });
 }
 
+export const update = async (userUpdateInfoDTO) => {
+    return axioss({
+        url: '/user/user/update',
+        method: 'put',
+        data: userUpdateInfoDTO,
+    })
+}
+
+export const logout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('token');
+    userStore.$reset();
+}

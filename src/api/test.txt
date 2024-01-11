@@ -1,1 +1,0 @@
-insert into scores (id, score, songId, song_difficulty) values (1,9988722,altair,3), (236,9944163,aloneandlorn,3)

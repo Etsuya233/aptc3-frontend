@@ -1,17 +1,17 @@
 <template>
     <el-dialog title="修改信息" v-model="updateUserInfoDialog.visible">
-        <el-form label-position="left" label-width="60px">
-            <el-form-item label="用户名">
+        <el-form label-position="top" :rules="rules" :model="updateUserInfoDialog">
+            <el-form-item label="用户名" prop="username">
                 <el-input v-model="updateUserInfoDialog.username"></el-input>
             </el-form-item>
-            <el-form-item label="旧密码">
+            <el-form-item label="旧密码（如不修改密码则留空）" prop="oldpw">
                 <el-input v-model="updateUserInfoDialog.oldpw"></el-input>
             </el-form-item>
-            <el-form-item label="新密码">
+            <el-form-item label="新密码（如不修改密码则留空）" prop="newpw">
                 <el-input v-model="updateUserInfoDialog.newpw"></el-input>
             </el-form-item>
-            <el-form-item> //TODO handleUpdateInfoInfo
-                <el-button @click="handleUpdateInfoInfo">提交</el-button>
+            <el-form-item>
+                <el-button @click="handleUpdateUserInfo">提交</el-button>
             </el-form-item>
         </el-form>
     </el-dialog>
@@ -37,17 +37,42 @@
         </div>
     </div>
     <el-button @click="updateNewPTT">修改PPT</el-button>
-    <el-button @click="updateInfo">修改信息</el-button>
+    <el-button @click="updateUserInfo">修改信息</el-button>
     <el-button @click="updateUserPTT">手动刷新PTT</el-button>
-    <el-button @click="logout">退出登录</el-button>
+    <el-button @click="userLogout">退出登录</el-button>
 </template>
 
 <script setup>
-import {ref, reactive} from 'vue';
+import {ref, reactive, toRaw} from 'vue';
+import { useRouter} from 'vue-router';
 import {useUserStore} from '@/stores/store'
-import { updatePTT } from '../api/score';
+import { updatePTT } from '@/api/score';
+import { update, count, logout } from '@/api/user.js';
 
 const userStore = useUserStore();
+const router = useRouter();
+
+const rules = reactive({
+    username: [
+        { required: true, message: '请输入用户名', trigger: 'blur'},
+        { min: 3, max: 15, message: '字数须在3-15之间', trigger: 'blur'},
+        {
+            async validator(rule, value, callback, source, options) {
+                let response = await count({username: value});         
+                if(response.data.data == 0 || value == userStore.username){
+                    callback();
+                } else callback(new Error());
+            },
+            message: '用户名已被使用',
+            trigger: 'blur'
+        }
+    ],
+    newpw: [
+        { required: true, message: '请输入密码', trigger: 'blur'},
+        { min: 3, max: 15, message: '字数须在3-15之间', trigger: 'blur'},
+    ]
+})
+
 
 let updateUserInfoDialog = reactive({
     visible: false,
@@ -61,6 +86,7 @@ let updatePTTDialog = reactive({
     newPtt: '',
 });
 
+//PTT
 async function updateUserPTT(){
     try {
         let response = await updatePTT();
@@ -72,7 +98,6 @@ async function updateUserPTT(){
             type: 'success'
         })
     } catch (error) {
-        console.log(error);
         ElNotification({
             title: '错误',
             type: 'error',
@@ -82,22 +107,40 @@ async function updateUserPTT(){
 
 }
 
-
-function updateInfo(){
+//User Info
+function updateUserInfo(){
     updateUserInfoDialog.visible = true;
     updateUserInfoDialog.username = userStore.username;
 }
 
-function handleUpdateInfo(){
+async function handleUpdateUserInfo(){
+    try {
+        let response = await update(toRaw(updateUserInfoDialog));
+        ElNotification({
+            title: '成功修改用户信息',
+            type: 'success'
+        });
+        updateUserInfoDialog.visible = false;
+    } catch(error){
+        ElNotification({
+            title: '修改用户信息失败',
+            message: `${error.name}: ${error.message}`,
+            type: 'error'
+        });
+    }
 }
 
+//PTT Refresh
 function updateNewPTT(){
     updatePTTDialog.visible = true;
     updatePTTDialog.newPtt = userStore.ptt;
 }
 
-function logout(){
 
+//Logout
+function userLogout(){
+    logout();
+    router.push({name: 'login'});
 }
 </script>
 

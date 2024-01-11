@@ -89,8 +89,18 @@ const rules = reactive({
         }
     ],
     arcId: [
-        { type: 'number', message: '请输入数字', trigger: 'blur'},
-        { max: 9, message: '已超过最大长度（9），请检查', trigger: 'blur'},
+        {
+            async validator(rule, value, callback, source, options) {
+                if(typeof(value) == 'string'){
+                    if(value.length != 9) callback(new Error());
+                    for(var i = 0; i < value.length; i++){
+                        if(value[i] < '0' || value[i] > '9') callback(new Error());
+                    }
+                }
+                callback();
+            }, 
+            message: 'ArcID要求9位数字。请检查', trigger: 'blur'
+        },
     ]
 })
 
