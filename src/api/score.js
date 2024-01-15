@@ -55,3 +55,13 @@ export const exportSt3 = async () => {
         responseType: 'blob',
     });
 }
+
+export const newPTT = async (ptt) => {
+    return axioss({
+        url: '/user/score/newPPT',
+        method: 'put',
+        params: {
+            newPTT: ptt,
+        }
+    });
+}

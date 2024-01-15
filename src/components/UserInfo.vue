@@ -46,7 +46,7 @@
 import {ref, reactive, toRaw} from 'vue';
 import { useRouter} from 'vue-router';
 import {useUserStore} from '@/stores/store'
-import { updatePTT } from '@/api/score';
+import { updatePTT, newPTT } from '@/api/score';
 import { update, count, logout } from '@/api/user.js';
 
 const userStore = useUserStore();
@@ -130,10 +130,30 @@ async function handleUpdateUserInfo(){
     }
 }
 
-//PTT Refresh
+//PTT Change
 function updateNewPTT(){
     updatePTTDialog.visible = true;
     updatePTTDialog.newPtt = userStore.ptt;
+}
+
+async function handleUpdatePTT(){
+    try {
+        let response = await newPTT(updatePTTDialog.newPtt);
+        userStore.ptt = response.data.data.ptt;
+        userStore.pttB30 = response.data.data.pttB30;
+        userStore.pttR10 = response.data.data.pttR10;
+        updatePTTDialog.visible = false;
+        ElNotification({
+            title: 'PTT修改成功！',
+            type: 'success'
+        })
+    } catch (error) {
+        ElNotification({
+            title: 'PTT修改失败！',
+            type: 'error',
+            message: `${error.name}: ${error.message}`,
+        })
+    }
 }
 
 
