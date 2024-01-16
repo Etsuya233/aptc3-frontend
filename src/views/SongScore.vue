@@ -9,7 +9,7 @@
         :packs="packs"
         @handle-close="handleScoreChangeClose" />
 
-        <UploadST3 
+        <UploadST3
         :visible="uploadST3Info.visible"
         @handle-close="handleUploadST3Close"
         @handle-refresh="updateScoreList" /> 
@@ -103,6 +103,7 @@ import { getAllSongs } from '@/api/song.js';
 import UploadST3 from '@/components/UploadST3.vue';
 import ScoreChange from '@/components/ScoreChange.vue';
 import ScoreSt3Export from '@/components/ScoreSt3Export.vue';
+import UploadST3Pro from '@/components/UploadST3Pro.vue';
 
 let records = ref([]);
 let total = ref(0);

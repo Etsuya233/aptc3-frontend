@@ -5,7 +5,6 @@
             ref="upload"
             drag
             :auto-upload="false"
-            :on-change="handleChange"
             :on-exceed="handleExceed"
             :limit="1"
             action=""
@@ -40,23 +39,12 @@ let { visible } = toRefs(props);
 let realVisible = ref(false);
 
 //上传
-let upload = ref(); //指向EL的upload组件
-let file = ref(); //我用来获取需要上传的文件，用于下面的submit！
-
-//这个钩子会在文件状态发生改变时调用
-//files是状态发生改变的文件（比如用户选择了文件啥的）（类型是EL封装好的，有个raw属性用来获取源文件)
-//fileLists是确定上传文件数组
-//这个函数放在这里是因为只要有用户选择了文件上传，就把这个文件给记录下来。用于下面的submitFile函数
-function handleChange(files, fileList){
-    console.log('change');
-    file.value = files;
-}
+let upload = ref(); //指向EL上传组件的ref！
 
 //files是上传文件数组(因为一次可能上传多个文件)
 //fileList是确定上传文件的列表
-//这个函数发生在handleChange之前！
 function handleExceed(files, fileList){
-    console.log('exceed');
+    console.log(files, fileList);
     upload.value.clearFiles();
     upload.value.handleStart(files[0]);
 }
