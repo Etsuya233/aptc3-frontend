@@ -22,7 +22,15 @@ axioss.interceptors.request.use((config) => {
 //响应拦截器
 axioss.interceptors.response.use(
     (response) => {
-      return response;
+        //TODO 应该使用更加好的方式来判断拦截下载！
+        //如果是下载请求的话就不拦截！（即url中包括download）
+        const isDownloadRequest = response.config.url.includes('download');
+        if(!isDownloadRequest && response.data.code != 200){
+            console.log(response.data.code, response.data.msg, response);
+            //TODO 这里应该需要统一显示错误信息，使用ELUI
+            return Promise.reject();
+        }
+        return response;
     },
     (error) => {
         //处理401

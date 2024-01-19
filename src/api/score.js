@@ -52,7 +52,14 @@ export const exportSt3 = async () => {
     return axioss({
         url: '/user/score/export',
         method: 'get',
-        responseType: 'blob',
+    });
+}
+
+export const downloadSt3 = async () => {
+    return axioss({
+        url: '/user/score/downloadSt3',
+        method: 'get',
+        responseType: 'blob'
     });
 }
 

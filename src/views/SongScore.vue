@@ -97,13 +97,12 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import { getAllScore, importScore, exportSt3 } from '@/api/score.js';
+import { getAllScore, importScore, exportSt3, downloadSt3 } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
 import UploadST3 from '@/components/UploadST3.vue';
 import ScoreChange from '@/components/ScoreChange.vue';
 import ScoreSt3Export from '@/components/ScoreSt3Export.vue';
-import UploadST3Pro from '@/components/UploadST3Pro.vue';
 
 let records = ref([]);
 let total = ref(0);
@@ -278,7 +277,8 @@ function handleExport(){
 
 async function startExportSt3(){
     try {
-        const response = await exportSt3();
+        await exportSt3();
+        const response = await downloadSt3();
         
         //下载文件：模拟点击按钮
         const url = window.URL.createObjectURL(new Blob([response.data]));
