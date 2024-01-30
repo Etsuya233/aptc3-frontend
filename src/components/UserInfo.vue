@@ -88,23 +88,14 @@ let updatePTTDialog = reactive({
 
 //PTT
 async function updateUserPTT(){
-    try {
-        let response = await updatePTT();
-        userStore.ptt = response.data.data.ptt;
-        userStore.pttR10 = response.data.data.pttR10;
-        userStore.pttB30 = response.data.data.pttB30;
-        ElNotification({
-            title: 'PTT更新成功',
-            type: 'success'
-        })
-    } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
-    }
-
+    let response = await updatePTT();
+    userStore.ptt = response.data.data.ptt;
+    userStore.pttR10 = response.data.data.pttR10;
+    userStore.pttB30 = response.data.data.pttB30;
+    ElNotification({
+        title: 'PTT更新成功',
+        type: 'success'
+    })
 }
 
 //User Info
@@ -114,20 +105,12 @@ function updateUserInfo(){
 }
 
 async function handleUpdateUserInfo(){
-    try {
-        let response = await update(toRaw(updateUserInfoDialog));
-        ElNotification({
-            title: '成功修改用户信息',
-            type: 'success'
-        });
-        updateUserInfoDialog.visible = false;
-    } catch(error){
-        ElNotification({
-            title: '修改用户信息失败',
-            message: `${error.name}: ${error.message}`,
-            type: 'error'
-        });
-    }
+    let response = await update(toRaw(updateUserInfoDialog));
+    ElNotification({
+        title: '成功修改用户信息',
+        type: 'success'
+    });
+    updateUserInfoDialog.visible = false;
 }
 
 //PTT Change
@@ -137,23 +120,15 @@ function updateNewPTT(){
 }
 
 async function handleUpdatePTT(){
-    try {
-        let response = await newPTT(updatePTTDialog.newPtt);
-        userStore.ptt = response.data.data.ptt;
-        userStore.pttB30 = response.data.data.pttB30;
-        userStore.pttR10 = response.data.data.pttR10;
-        updatePTTDialog.visible = false;
-        ElNotification({
-            title: 'PTT修改成功！',
-            type: 'success'
-        })
-    } catch (error) {
-        ElNotification({
-            title: 'PTT修改失败！',
-            type: 'error',
-            message: `${error.name}: ${error.message}`,
-        })
-    }
+    let response = await newPTT(updatePTTDialog.newPtt);
+    userStore.ptt = response.data.data.ptt;
+    userStore.pttB30 = response.data.data.pttB30;
+    userStore.pttR10 = response.data.data.pttR10;
+    updatePTTDialog.visible = false;
+    ElNotification({
+        title: 'PTT修改成功！',
+        type: 'success'
+    });
 }
 
 

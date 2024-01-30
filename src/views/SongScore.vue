@@ -148,40 +148,20 @@ async function updateScoreList(){
         records.value = response.data.data.records;
         total.value = response.data.data.total;  
     } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
+        
     } finally {
         loading.value = false;
     }
 }
 
 async function updatePack(){
-    try {
-        let response = await getAllPack();
-        packs.value = response.data.data;
-    } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
-    }
+    let response = await getAllPack();
+    packs.value = response.data.data;
 }
 
 async function updateSongs(){
-    try {
-        let response = await getAllSongs();
-        songs.value = response.data.data;
-    } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
-    }
+    let response = await getAllSongs();
+    songs.value = response.data.data;
 }
 
 onMounted(() => {
@@ -276,24 +256,16 @@ function handleExport(){
 }
 
 async function startExportSt3(){
-    try {
-        await exportSt3();
-        const response = await downloadSt3();
-        
-        //下载文件：模拟点击按钮
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'export.st3');
-        document.body.appendChild(link);
-        link.click();
-    } catch (error){
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
-    }
+    await exportSt3();
+    const response = await downloadSt3();
+    
+    //下载文件：模拟点击按钮
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'export.st3');
+    document.body.appendChild(link);
+    link.click();
 }
 
 </script>

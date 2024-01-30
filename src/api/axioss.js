@@ -6,7 +6,7 @@ import router from "@/router/routes";
 const userStore = useUserStore(pinia);
 
 const axioss = axios.create({
-    baseURL: 'http://localhost:8080',
+    baseURL: '/api',
 })
 
 //请求拦截器
@@ -24,12 +24,10 @@ axioss.interceptors.response.use(
     (response) => {
         //TODO 应该使用更加好的方式来判断拦截下载！
         //如果是下载请求的话就不拦截！（即url中包括download）
-        const isDownloadRequest = response.config.url.includes('download');
-        if(!isDownloadRequest && response.data.code != 200){
-            console.log(response.data.code, response.data.msg, response);
-            //TODO 这里应该需要统一显示错误信息，使用ELUI
-            return Promise.reject();
-        }
+        // const isDownloadRequest = response.config.url.includes('download');
+        // if(!isDownloadRequest && response.data.code != 200){ //处理下载请求不被拦截
+        //     console.log(response.data.code, response.data.msg, response);
+        // }
         return response;
     },
     (error) => {
@@ -40,8 +38,13 @@ axioss.interceptors.response.use(
             userStore.isLoggedInSto = false;
             userStore.tokenSto = undefined;
             router.push({ name: 'login' });
-        } else {
-            console.error('Error:', error);
+        } else if(error.response) { //处理其他异常
+            ElNotification({
+                title: error.response.data.msg,
+                type: 'error',
+                duration: 5000,
+                message: `错误代码：${error.response.data.code}。`,
+            });
         }
         return Promise.reject(error);
     }

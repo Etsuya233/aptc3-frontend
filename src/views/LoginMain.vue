@@ -1,18 +1,18 @@
 <template>
     <div class="main">
-        <h1>Login</h1>
+        <h1>登陆</h1>
     </div>
     <div class="input">
         <el-form :model="form" >
             <el-form-item label="">
-                <el-input placeholder="Username" v-model="form.username"></el-input>
+                <el-input placeholder="用户名" v-model="form.username"></el-input>
             </el-form-item>
             <el-form-item label="">
-                <el-input placeholder="Password" v-model="form.password" type="password"></el-input>
+                <el-input placeholder="密码" v-model="form.password" type="password"></el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="onLoginSubmit">Login</el-button>
-                <el-button type="info" @click="router.push('register')">Register</el-button>
+                <el-button type="primary" @click="onLoginSubmit">登陆</el-button>
+                <el-button type="info" @click="router.push('register')">注册</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -33,38 +33,30 @@ const form = reactive({
 });
 
 async function onLoginSubmit(){
-    try {
-        let response = await login(form);
+    let response = await login(form);
 
-        //将用户信息保存至pinia
-        userStore.isLoggedInSto = true;
-        userStore.uid = response.data.data.uid;
-        userStore.arcId = response.data.data.arcId; 
-        userStore.username = response.data.data.username;
-        userStore.status = response.data.data.status;
-        userStore.tokenSto = response.data.data.token;
-        userStore.ptt = response.data.data.ptt;
-        userStore.pttB30 = response.data.data.pttB30;
-        userStore.pttR10 = response.data.data.pttR10;
+    //将用户信息保存至pinia
+    userStore.isLoggedInSto = true;
+    userStore.uid = response.data.data.uid;
+    userStore.arcId = response.data.data.arcId; 
+    userStore.username = response.data.data.username;
+    userStore.status = response.data.data.status;
+    userStore.tokenSto = response.data.data.token;
+    userStore.ptt = response.data.data.ptt;
+    userStore.pttB30 = response.data.data.pttB30;
+    userStore.pttR10 = response.data.data.pttR10;
 
-        //持久化保存
-        let token = response.data.data.token;
-        localStorage.setItem('token', token);
-        localStorage.setItem('isLoggedIn', true);
+    //持久化保存
+    let token = response.data.data.token;
+    localStorage.setItem('token', token);
+    localStorage.setItem('isLoggedIn', true);
 
-        ElNotification({
-            title: `登陆成功`,
-            message: `欢迎回来，${form.username}.`,
-            type: 'success'
-        })
-        router.push({name: 'userinfo'});
-    } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
-    }
+    ElNotification({
+        title: `登陆成功`,
+        message: `欢迎回来，${form.username}.`,
+        type: 'success'
+    })
+    router.push({name: 'userinfo'});
 }
 </script>
 

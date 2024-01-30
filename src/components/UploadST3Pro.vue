@@ -57,24 +57,16 @@ async function submitFile(){
             message: '文件大小不应超过1M！',
         })
     } else {
-        try {
-            let formData = new FormData();
-            formData.append('file', file.value.raw);
-            await importScore(formData);
-            ElNotification({
-                type: 'success',
-                title: '导入st3',
-                message: '已成功导入成绩！'
-            })
-            emits('handleRefresh');
-            emits('handleClose');
-        } catch (error) {
-            ElNotification({
-                type: 'error',
-                title: '导入st3',
-                message: '导入失败！'
-            })
-        }
+        let formData = new FormData();
+        formData.append('file', file.value.raw);
+        await importScore(formData);
+        ElNotification({
+            type: 'success',
+            title: '导入st3',
+            message: '已成功导入成绩！'
+        })
+        emits('handleRefresh');
+        emits('handleClose');
     }
 }
 

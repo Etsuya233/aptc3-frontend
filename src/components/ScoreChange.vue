@@ -118,18 +118,9 @@ async function handleSubmit(){
     scoreNew.ftrPtt = ftrPttGetter.value;
     scoreNew.bydPtt = bydPttGetter.value;
     scoreNew.type = type.value;
-    try {
-        let response = await updateScore(toRaw(scoreNew));
-        console.log('成功！');
-        updatePTT();
-        emits('handleClose', true, scoreNew.sname);
-    } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: `${error.name}: ${error.message}`
-        })
-    }
+    let response = await updateScore(toRaw(scoreNew));
+    updatePTT();
+    emits('handleClose', true, scoreNew.sname);
 }
 
 

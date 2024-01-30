@@ -1,7 +1,6 @@
 <template>
     <div class="main">
         <h1>注册</h1>
-        <el-button @click="testBox">Test</el-button>
     </div>
     <div class="input">
         <el-row>
@@ -16,9 +15,6 @@
                     </el-form-item>
                     <el-form-item label="Arcaea ID（选填）" prop="arcId">
                         <el-input v-model="form.arcId"></el-input>
-                    </el-form-item>
-                    <el-form-item label="E-mail（必填，用于找回密码）" prop="email">
-                        <el-input v-model="form.email"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="onRegisterSubmit">注册</el-button>
@@ -50,7 +46,6 @@ const form = reactive({
     username: '',
     password: '',
     arcId: '',
-    email: '',
 });
 
 const rules = reactive({
@@ -73,21 +68,6 @@ const rules = reactive({
         { required: true, message: '请输入密码', trigger: 'blur'},
         { min: 3, max: 15, message: '字数须在3-15之间', trigger: 'blur'},
     ],
-    email: [
-        { required: true, message: '请输入邮箱', trigger: 'blur'},
-        { type: 'email', message: '请输入正确的邮箱', trigger: 'blur'},
-        //该邮箱已被使用
-        {
-            async validator(rule, value, callback, source, options) {
-                let response = await count({email: value});
-                if(response.data.data == 0){
-                    callback();
-                } else callback(new Error());
-            },
-            message: '邮箱已被使用',
-            trigger: 'blur'
-        }
-    ],
     arcId: [
         {
             async validator(rule, value, callback, source, options) {
@@ -105,23 +85,15 @@ const rules = reactive({
 })
 
 async function onRegisterSubmit(){
-    try{
-        await register(toRaw(form));
-        ElNotification({
-            title: '注册成功',
-            message: '3秒将跳转登陆页面...',
-            type: 'success',
-        });
-        setTimeout(() => {
-            router.push('login');
-        }, 3000);
-    } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: error.message
-        })
-    }
+    await register(toRaw(form));
+    ElNotification({
+        title: '注册成功',
+        message: '3秒将跳转登陆页面...',
+        type: 'success',
+    });
+    setTimeout(() => {
+        router.push('login');
+    }, 3000);
 }  
 
 </script>

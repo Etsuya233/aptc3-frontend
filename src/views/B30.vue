@@ -45,11 +45,7 @@ async function updateB30(){
         records.value = response.data.data;
         total.value = response.data.data.length;
     } catch (error) {
-        ElNotification({
-            title: '错误',
-            type: 'error',
-            message: error.message
-        })
+        
     } finally {
         loading.value = false;
     }

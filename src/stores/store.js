@@ -10,7 +10,9 @@ export const useUserStore = defineStore('user', () => {
     let tokenSto = ref();
     let ptt = ref();
     let pttB30 = ref();
-    let pttR10 = ref()
+    let pttR10 = ref();
+    let errMsg = ref();
+    let errCode = ref();
 
     function $reset(){
         isLoggedInSto.value = false;
@@ -22,6 +24,8 @@ export const useUserStore = defineStore('user', () => {
         ptt.value = ref();
         pttB30.value = ref();
         pttR10.value = ref();
+        errCode.value = ref();
+        errMsg.value = ref();
     }
 
     const token = computed(() => {
