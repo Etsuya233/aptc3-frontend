@@ -1,11 +1,11 @@
 <template>
     <el-dialog
         v-model="realVisible"
-        title="导入ST3"
+        title="导出CSV文件"
         width="30%"
         :before-close="beforeClose"
         >
-        <span>是否导出ST3？一天内只能导出一次，而且导出的文件只能用于导入APTC！</span>
+        <span>是否导出CSV？一天内只能导出一次！</span>
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="emits('handleClose')">取消</el-button>

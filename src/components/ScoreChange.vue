@@ -22,25 +22,30 @@
                     />
                 </el-select>
             </el-form-item>
-            <el-form-item label="Past" v-show="type === 0 || type === 1 || type === 5">
+            <el-form-item label="Past">
                 <el-col :span="18"><el-input v-model="scoreNew.pstScore" :disabled="scoreNew.pst === null || scoreNew.pst === undefined || scoreNew.pst === 0"/></el-col>
                 <el-col :span="1"></el-col>
                 <el-col :span="4">定数：{{ pstPttGetter }}</el-col>
             </el-form-item>
-            <el-form-item label="Present" v-show="type === 0 || type === 2 || type === 5">
+            <el-form-item label="Present">
                 <el-col :span="18"><el-input v-model="scoreNew.prsScore" :disabled="scoreNew.prs === null || scoreNew.prs === undefined || scoreNew.prs === 0"/></el-col>
                 <el-col :span="1"></el-col>
                 <el-col :span="4">定数：{{ prsPttGetter }}</el-col>
             </el-form-item>
-            <el-form-item label="Future" v-show="type === 0 || type === 3 || type === 5">
+            <el-form-item label="Future">
                 <el-col :span="18"><el-input v-model="scoreNew.ftrScore" :disabled="scoreNew.ftr === null || scoreNew.ftr === undefined || scoreNew.ftr === 0"/></el-col>
                 <el-col :span="1"></el-col>
                 <el-col :span="4">定数：{{ ftrPttGetter }}</el-col>
             </el-form-item>
-            <el-form-item label="Beyond" v-show="type === 0 || type === 4 || type === 5">
+            <el-form-item label="Beyond">
                 <el-col :span="18"><el-input v-model="scoreNew.bydScore" :disabled="scoreNew.byd === null || scoreNew.byd === undefined || scoreNew.byd === 0"/></el-col>
                 <el-col :span="1"></el-col>
                 <el-col :span="4">定数：{{ bydPttGetter }}</el-col>
+            </el-form-item>
+            <el-form-item label="Eternal">
+                <el-col :span="18"><el-input v-model="scoreNew.etrScore" :disabled="scoreNew.etr === null || scoreNew.etr === undefined || scoreNew.etr === 0"/></el-col>
+                <el-col :span="1"></el-col>
+                <el-col :span="4">定数：{{ etrPttGetter }}</el-col>
             </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="handleSubmit">更新</el-button>
@@ -54,23 +59,51 @@
 import { ref, reactive, watch, toRefs, toRef, shallowRef, toRaw, computed } from 'vue';
 import { empty } from '@/hooks/object.js';
 import { updateScore } from '@/api/score.js';
-import { updatePTT } from '../api/score';
+import { updatePTT, getScoreBySgid } from '../api/score';
 
-//type 0:4个难度都有 1234:对应每个难度 5:新增歌曲！
+
+//type 0:通过表格修改成绩 5:新增歌曲！后端要用到！看是插入还是修改！
+//scoreData：用于记录当前修改的信息
+//songs：SongScore传入的歌曲列表，刷新网页才更新！
+//packs：曲包信息
 const props = defineProps(['type', 'visible', 'scoreData', 'songs', 'packs']);
 const emits = defineEmits(['handleClose']);
 
 let { scoreData, type, visible, songs, packs } = toRefs(props);//注意，这里的props更新了的话，scoreData也会更新！！！
 
+//TODO 理解一下这个？
+/*
+{
+    "sid": null,
+    "scid": null,
+    "pid": null,
+    "sname": null,
+    "pst": null,
+    "pstScore": null,
+    "pstPtt": null,
+    "prs": null,
+    "prsScore": 10000839,
+    "prsPtt": null,
+    "ftr": null,
+    "ftrScore": 9910149,
+    "ftrPtt": null,
+    "byd": null,
+    "bydScore": null,
+    "bydPtt": null,
+    "etr": null,
+    "etrScore": null,
+    "etrPtt": null
+}
+*/
 let scoreNew = reactive({scoreData});
 
-//监视更新，props更行后执行
+//监视更新，当scoreData更新时（表格点击修改成绩，添加成绩时）
 watch(scoreData, (newScoreData) => {
     empty(scoreNew);
     Object.assign(scoreNew, newScoreData);
 })
 
-//歌曲搜索
+//歌曲搜索（用于autocomplete）
 function querySearch(queryString, cb){
     let result;
     result = songs.value.filter(element => {
@@ -80,8 +113,18 @@ function querySearch(queryString, cb){
 }
 
 //选择歌曲后复制属性
-function handleSelect(selected){
+async function handleSelect(selected){
+    //复制属性
     Object.assign(scoreNew, selected);
+    //查看是否已经存在成绩
+    let response = await getScoreBySgid(selected.sgid);
+    if(response != null){
+        scoreNew.pstScore = response.data.data.pstScore;
+        scoreNew.prsScore = response.data.data.prsScore;
+        scoreNew.ftrScore = response.data.data.ftrScore;
+        scoreNew.bydScore = response.data.data.bydScore;
+        scoreNew.etrScore = response.data.data.etrScore;
+    }
 }
 
 //定数计算
@@ -109,6 +152,10 @@ let bydPttGetter = computed(() => {
     return (scoreNew.bydScore === undefined || scoreNew.bydScore === null || scoreNew.bydScore === '')? 
         0: getPotential(scoreNew.bydScore, scoreNew.byd).toFixed(2);
 })
+let etrPttGetter = computed(() => {
+    return (scoreNew.etrScore === undefined || scoreNew.etrScore === null || scoreNew.etrScore === '')? 
+        0: getPotential(scoreNew.etrScore, scoreNew.etr).toFixed(2);
+})
 
 
 //更新/添加成绩
@@ -117,8 +164,9 @@ async function handleSubmit(){
     scoreNew.prsPtt = prsPttGetter.value;
     scoreNew.ftrPtt = ftrPttGetter.value;
     scoreNew.bydPtt = bydPttGetter.value;
+    scoreNew.etrPtt = etrPttGetter.value;
     scoreNew.type = type.value;
-    let response = await updateScore(toRaw(scoreNew));
+    await updateScore(toRaw(scoreNew));
     updatePTT();
     emits('handleClose', true, scoreNew.sname);
 }

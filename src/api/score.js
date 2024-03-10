@@ -63,6 +63,21 @@ export const downloadSt3 = async () => {
     });
 }
 
+export const exportCsv = async () => {
+    return axioss({
+        url: '/user/score/exportCsv',
+        method: 'get',
+    });
+}
+
+export const downloadCsv = async () => {
+    return axioss({
+        url: '/user/score/downloadCsv',
+        method: 'get',
+        responseType: 'blob'
+    });
+}
+
 export const newPTT = async (ptt) => {
     return axioss({
         url: '/user/score/newPPT',
@@ -70,5 +85,12 @@ export const newPTT = async (ptt) => {
         params: {
             newPTT: ptt,
         }
+    });
+}
+
+export const getScoreBySgid = async (sgid) => {
+    return axioss({
+        url: `/user/score/${sgid}`,
+        method: 'get',
     });
 }

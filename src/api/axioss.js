@@ -2,11 +2,12 @@ import axios from "axios";
 import pinia from '@/stores/index.js';
 import { useUserStore } from "@/stores/store.js";
 import router from "@/router/routes";
+import { ElNotification } from "element-plus";
 
 const userStore = useUserStore(pinia);
 
 const axioss = axios.create({
-    baseURL: '/api',
+    baseURL: 'http://localhost:8080/',
 })
 
 //请求拦截器
@@ -24,10 +25,16 @@ axioss.interceptors.response.use(
     (response) => {
         //TODO 应该使用更加好的方式来判断拦截下载！
         //如果是下载请求的话就不拦截！（即url中包括download）
-        // const isDownloadRequest = response.config.url.includes('download');
-        // if(!isDownloadRequest && response.data.code != 200){ //处理下载请求不被拦截
-        //     console.log(response.data.code, response.data.msg, response);
-        // }
+        const isDownloadRequest = response.config.url.includes('download');
+        if(!isDownloadRequest && response.data.code != 200){ //处理下载请求不被拦截
+            ElNotification({
+                title: response.data.msg,
+                type: 'error',
+                duration: 5000,
+                message: `错误代码：${response.data.code}。`
+            })
+            return Promise.reject();
+        }
         return response;
     },
     (error) => {

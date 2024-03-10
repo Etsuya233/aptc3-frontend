@@ -13,7 +13,7 @@
                     <el-form-item label="密码" prop="password">
                         <el-input v-model="form.password" type="password"></el-input>
                     </el-form-item>
-                    <el-form-item label="Arcaea ID（选填）" prop="arcId">
+                    <el-form-item label="Arcaea ID（选填，用于导出时展示）" prop="arcId">
                         <el-input v-model="form.arcId"></el-input>
                     </el-form-item>
                     <el-form-item>

@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="scoretable" v-loading="loading" >
-            <el-table :data="records" style="width: 100%" border :row-class-name="rowClassName" ::highlight-current-row="false">
+            <el-table :data="records" style="width: 100%" border :row-class-name="rowClassName" :highlight-current-row="false">
                 <el-table-column fixed type="index" label="排名" min-width="30px" />
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column prop="difficulty" label="难度" min-width="50px" />
@@ -18,7 +18,7 @@
                 <el-pagination
                 layout="total, sizes"
                 :total="total"
-                :page-sizes="[30, 50, 100, 200, 500]"
+                :page-sizes="[30, 50, 100, 200, 300, 400, 500]"
                 :default-page-size="30"
                 @size-change="updateB30(val)"
                 v-model:page-size="pageSize"
@@ -57,6 +57,7 @@ function rowClassName({row, rowIndex}){
         case 2: return 'prs-row';
         case 3: return 'ftr-row';
         case 4: return 'byd-row';
+        case 5: return 'etr-row';
         default: return '';
     }
 }

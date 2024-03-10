@@ -14,10 +14,10 @@
         @handle-close="handleUploadST3Close"
         @handle-refresh="updateScoreList" /> 
 
-        <ScoreSt3Export
-        :visible="exportSt3Info.visible"
-        @handle-close="handleExportSt3Close"
-        @handle-export="startExportSt3"
+        <ScoreCsvExport
+        :visible="exportCsvInfo.visible"
+        @handle-close="handleExportCsvClose"
+        @handle-export="startExportCsv"
         />        
 
         
@@ -38,10 +38,10 @@
                 </el-col>
                 <el-col :span="4"></el-col>
                 <el-col :span="2">
-                    <el-button @click="handleNew">新增</el-button>
+                    <el-button @click="handleNew">新增/修改成绩</el-button>
                 </el-col>
                 <el-col :span="2">
-                    <el-button @click="handleExport">导出st3</el-button>
+                    <el-button @click="handleExport">导出CSV</el-button>
                 </el-col>
                 <el-col :span="2">
                     <el-button @click="handleImport">导入st3</el-button>
@@ -52,11 +52,6 @@
         <div class="scoretable">
             <el-table :data="records" style="width: 100%" v-loading="loading" :cell-style="changeCellStyle" >
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
-                <el-table-column label="Present">
-                    <el-table-column prop="pst" min-width="60px" label="难度"  />
-                    <el-table-column prop="pstScore" min-width="100px" label="成绩"  />
-                    <el-table-column prop="pstPtt" min-width="60px" label="定数" :formatter="formatter" />
-                </el-table-column>
                 <el-table-column label="Past">
                     <el-table-column prop="prs" min-width="60px" label="难度"  />
                     <el-table-column prop="prsScore" min-width="100px" label="成绩"  />
@@ -71,6 +66,16 @@
                     <el-table-column prop="byd" min-width="60px" label="难度"  />
                     <el-table-column prop="bydScore" min-width="100px" label="成绩"  />
                     <el-table-column prop="bydPtt" min-width="60px" label="定数" :formatter="formatter" />
+                </el-table-column>
+                <el-table-column label="Eternal">
+                    <el-table-column prop="etr" min-width="60px" label="难度"  />
+                    <el-table-column prop="etrScore" min-width="100px" label="成绩"  />
+                    <el-table-column prop="etrPtt" min-width="60px" label="定数" :formatter="formatter" />
+                </el-table-column>
+                <el-table-column label="Present">
+                    <el-table-column prop="pst" min-width="60px" label="难度"  />
+                    <el-table-column prop="pstScore" min-width="100px" label="成绩"  />
+                    <el-table-column prop="pstPtt" min-width="60px" label="定数" :formatter="formatter" />
                 </el-table-column>
                 <el-table-column fixed="right" min-width="60px" label="操作">
                     <template v-slot="scope">
@@ -97,20 +102,20 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue';
-import { getAllScore, importScore, exportSt3, downloadSt3 } from '@/api/score.js';
+import { getAllScore, importScore, exportCsv, downloadCsv } from '@/api/score.js';
 import { getAllPack } from '@/api/pack.js';
 import { getAllSongs } from '@/api/song.js';
 import UploadST3 from '@/components/UploadST3.vue';
 import ScoreChange from '@/components/ScoreChange.vue';
-import ScoreSt3Export from '@/components/ScoreSt3Export.vue';
+import ScoreCsvExport from '@/components/ScoreCsvExport.vue';
 
-let records = ref([]);
-let total = ref(0);
+let records = ref([]); //当前页记录
+let total = ref(0); 
 
 let pageNum = ref(1);
 let pageSize = ref(30);
 
-let sname = ref('');
+let sname = ref(''); //搜索时用到的
 let pid = ref(null);
 
 let packs = ref([]);
@@ -185,13 +190,15 @@ function formatter(row, column, cellValue, index){
 
 function changeCellStyle(cell){
     if(cell.columnIndex >= 1 && cell.columnIndex <= 3){
-        return {'background': '#EAF2F8'};
-    } else if(cell.columnIndex >= 4 && cell.columnIndex <= 6){
         return {'background': '#E9F7EF'};
-    } else if(cell.columnIndex >= 7 && cell.columnIndex <= 9){
+    } else if(cell.columnIndex >= 4 && cell.columnIndex <= 6){
         return {'background': '#F5EEF8'};
-    } else if(cell.columnIndex >= 10 && cell.columnIndex <= 12){
+    } else if(cell.columnIndex >= 7 && cell.columnIndex <= 9){
         return {'background': '#F9EBEA'};
+    } else if(cell.columnIndex >= 10 && cell.columnIndex <= 12){
+        return {'background': '#dcd6e9'};
+    } else if(cell.columnIndex >= 13 && cell.columnIndex <= 15){
+        return {'background': '#EAF2F8'}
     }
 }
 
@@ -241,32 +248,32 @@ function handleImport(){
 }
 
 //导出
-let exportSt3Info = reactive({
+let exportCsvInfo = reactive({
     visible: false,
 })
 
-function handleExportSt3Close(){
-    exportSt3Info.visible = false;
+function handleExportCsvClose(){
+    exportCsvInfo.visible = false;
 }
 
 function handleExport(){
-    exportSt3Info.visible = true;
-
-   
+    exportCsvInfo.visible = true;
 }
 
-async function startExportSt3(){
-    await exportSt3();
-    const response = await downloadSt3();
+async function startExportCsv(){
+    await exportCsv();
+    const response = await downloadCsv();
     
     //下载文件：模拟点击按钮
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'export.st3');
+    link.setAttribute('download', 'export.csv');
     document.body.appendChild(link);
     link.click();
 }
+
+
 
 </script>
 
