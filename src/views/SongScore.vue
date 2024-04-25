@@ -50,7 +50,7 @@
         </div>
 
         <div class="scoretable">
-            <el-table :data="records" style="width: 100%" v-loading="loading" :cell-style="changeCellStyle" >
+            <el-table :data="records" style="width: 100%" v-loading="loading" :cell-style="changeCellStyle" class="el-scoretable">
                 <el-table-column fixed prop="sname" min-width="140px" label="歌曲名" />
                 <el-table-column label="Past">
                     <el-table-column prop="prs" min-width="60px" label="难度"  />

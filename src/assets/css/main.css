@@ -3,8 +3,8 @@
 }
 
 .header {
-    background-color: aliceblue;
-    display: flex;
+    /* background-color: aliceblue; */
+    /* display: flex; */
 }
 
 .item {
@@ -18,8 +18,6 @@
     padding: 0%;
 }
 
-.footer {
-    background-color: aliceblue;
-    box-sizing: border-box;
-    /* border-top: gainsboro solid; */
+.el-header {
+    --el-header-padding: 0px;
 }

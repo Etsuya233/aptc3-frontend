@@ -1,6 +1,5 @@
 .aside {
     width: 150px;
-    /* background-color: azure; */
     height: 100%;
 }
 
@@ -16,6 +15,6 @@
     height: 100%;
 }
 
-el-menu el-menu-item {
-    
+.el-main {
+    --el-main-padding: 0px;
 }

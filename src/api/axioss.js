@@ -7,7 +7,8 @@ import { ElNotification } from "element-plus";
 const userStore = useUserStore(pinia);
 
 const axioss = axios.create({
-    baseURL: 'http://localhost:8080/',
+    // baseURL: 'http://localhost:8080/',
+    //生产环境直接注释掉
 })
 
 //请求拦截器
