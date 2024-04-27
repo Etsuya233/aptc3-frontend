@@ -41,6 +41,8 @@
         <el-button @click="updateUserInfo">修改信息</el-button>
         <el-button @click="updateUserPTT">手动刷新PTT</el-button>
         <el-button @click="userLogout">退出登录</el-button>
+        
+        <br>
     </div>
 </template>
 

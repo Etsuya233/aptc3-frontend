@@ -1,7 +1,12 @@
 <template>
     <el-container class="common">
         <el-main class="main">
-            <RouterView />
+            <router-view v-slot="{ Component }">
+                <keep-alive>
+                    <component :is="Component" :key="$route.path" v-if="$route.meta.keepAlive"/>
+                </keep-alive>
+                <component :is="Component" :key="$route.path" v-if="!$route.meta.keepAlive"/>
+            </router-view>  
         </el-main>
     </el-container>    
 </template>

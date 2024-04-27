@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import pinia from '@/stores/index.js';
 import { useUserStore } from "@/stores/store.js";
 import { getCurrentUserDetail } from "@/api/user";
+import { KeepAlive } from 'vue';
 
 const router = createRouter({
     history: createWebHashHistory(),
@@ -12,14 +13,7 @@ const router = createRouter({
             component: () => import('@/views/Index.vue'),
             meta: {
                 requiresAuth: false,
-            }
-        },
-        {
-            path: '/test',
-            name: 'test',
-            component: () => import('@/views/TestView.vue'),
-            meta: {
-                requiresAuth: false,
+                keepAlive: false
             }
         },
         {
@@ -28,6 +22,7 @@ const router = createRouter({
             component: () => import('@/views/LoginMain.vue'),
             meta: {
                 requiresAuth: false,
+                keepAlive: false
             }
         },
         {
@@ -42,16 +37,33 @@ const router = createRouter({
                     path: 'score',
                     name: 'score',
                     component: () => import('@/views/SongScore.vue'),
+                    meta: {
+                        keepAlive: true
+                    }
                 },
                 {
                     path: 'info',
                     name: 'userinfo',
-                    component: () => import('@/components/UserInfo.vue'),
+                    component: () => import('@/views/UserInfo.vue'),
+                    meta: {
+                        keepAlive: true
+                    }
                 },
                 {
                     path: 'b30',
                     name: 'b30',
-                    component: () => import('@/views/B30.vue')
+                    component: () => import('@/views/B30.vue'),
+                    meta: {
+                        keepAlive: false
+                    }
+                },
+                {
+                    path: 'charts',
+                    name: 'charts',
+                    component: () => import('@/views/UserCharts.vue'),
+                    meta: {
+                        keepAlive: true
+                    }
                 }
             ]
         },

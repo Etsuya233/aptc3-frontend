@@ -13,18 +13,19 @@
                     <el-menu-item index="/user/info">个人中心</el-menu-item>
                     <el-menu-item index="/user/score">成绩列表</el-menu-item>
                     <el-menu-item index="/user/b30">B30</el-menu-item>
+                    <el-menu-item index="/user/charts">图表</el-menu-item>
                 </el-menu>
             </el-header>
 
             <el-main class="main">
-                <RouterView />
+                <router-view /> 
             </el-main>
         </el-container>
     </div>  
 </template>
 
 <script setup>
-import {ref} from 'vue';
+import {ref, KeepAlive} from 'vue';
 import { useRouter } from 'vue-router';
 import useUserStore from '@/stores/store.js'
 const store = useUserStore();
